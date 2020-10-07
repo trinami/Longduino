@@ -2,6 +2,9 @@
 #include "oledfont.h"
 #include "bmp.h"
 u16 BACK_COLOR;   //Background color
+u8 _lcd_rotation = USE_HORIZONTAL;
+u16 _lcd_width = LCD_W;
+u16 _lcd_height = LCD_H;
 
 
 /******************************************************************************
@@ -85,7 +88,7 @@ void LCD_WR_REG(u8 dat)
 ******************************************************************************/
 void LCD_Address_Set(u16 x1,u16 y1,u16 x2,u16 y2)
 {
-	if(USE_HORIZONTAL==0)
+	if(_lcd_rotation==0)
 	{
 		LCD_WR_REG(0x2a);//Column address settings
 		LCD_WR_DATA(x1+26);
@@ -95,7 +98,7 @@ void LCD_Address_Set(u16 x1,u16 y1,u16 x2,u16 y2)
 		LCD_WR_DATA(y2+1);
 		LCD_WR_REG(0x2c);//Memory write
 	}
-	else if(USE_HORIZONTAL==1)
+	else if(_lcd_rotation==1)
 	{
 		LCD_WR_REG(0x2a);//Column address settings
 		LCD_WR_DATA(x1+26);
@@ -105,7 +108,7 @@ void LCD_Address_Set(u16 x1,u16 y1,u16 x2,u16 y2)
 		LCD_WR_DATA(y2+1);
 		LCD_WR_REG(0x2c);//Memory write
 	}
-	else if(USE_HORIZONTAL==2)
+	else if(_lcd_rotation==2)
 	{
 		LCD_WR_REG(0x2a);//Column address settings
 		LCD_WR_DATA(x1+1);
@@ -328,9 +331,9 @@ void Lcd_Init(void)
 	LCD_WR_DATA8(0x05);	// 16-bit/pixel
 
 	LCD_WR_REG(0x36);
-	if(USE_HORIZONTAL==0)LCD_WR_DATA8(0x08);
-	else if(USE_HORIZONTAL==1)LCD_WR_DATA8(0xC8);
-	else if(USE_HORIZONTAL==2)LCD_WR_DATA8(0x78);
+	if(_lcd_rotation==0)LCD_WR_DATA8(0x08);
+	else if(_lcd_rotation==1)LCD_WR_DATA8(0xC8);
+	else if(_lcd_rotation==2)LCD_WR_DATA8(0x78);
 	else LCD_WR_DATA8(0xA8);
 
 	LCD_WR_REG(0x29);	// Display On
@@ -344,10 +347,10 @@ void Lcd_Init(void)
 void LCD_Clear(u16 Color)
 {
 	u16 i,j;  	
-	LCD_Address_Set(0,0,LCD_W-1,LCD_H-1);
-    for(i=0;i<LCD_W;i++)
+	LCD_Address_Set(0,0,_lcd_width-1,_lcd_height-1);
+    for(i=0;i<_lcd_width;i++)
 	  {
-			for (j=0;j<LCD_H;j++)
+			for (j=0;j<_lcd_height;j++)
 				{
 					LCD_WR_DATA(Color);
 				}
@@ -528,7 +531,7 @@ void LCD_ShowChar(u16 x,u16 y,u8 num,u8 mode,u16 color)
     u8 temp;
     u8 pos,t;
 	  u16 x0=x;    
-    if(x>LCD_W-16||y>LCD_H-16)return;	    //Settings window		   
+    if(x>_lcd_width-16||y>_lcd_height-16)return;	    //Settings window		   
 	num=num-' ';//Get offset value
 	LCD_Address_Set(x,y,x+8-1,y+16-1);      //Set cursor position
 	if(!mode) //Non-overlapping
@@ -571,8 +574,8 @@ void LCD_ShowString(u16 x,u16 y,const u8 *p,u16 color)
 {         
     while(*p!='\0')
     {       
-        if(x>LCD_W-16){x=0;y+=16;}
-        if(y>LCD_H-16){y=x=0;LCD_Clear(RED);}
+        if(x>_lcd_width-16){x=0;y+=16;}
+        if(y>_lcd_height-16){y=x=0;LCD_Clear(RED);}
         LCD_ShowChar(x,y,*p,0,color);
         x+=8;
         p++;
@@ -674,3 +677,21 @@ void LCD_ShowLogo(void)
 	}			
 }
 
+void LCD_SetRotation(u8 rotation)
+{
+	_lcd_rotation = rotation;
+
+	if ((_lcd_rotation==0) || (_lcd_rotation==1)) {
+		_lcd_width = 80;
+		_lcd_height = 160;
+	} else {
+		_lcd_width = 160;
+		_lcd_height = 80;
+	}
+
+        LCD_WR_REG(0x36);
+        if(_lcd_rotation==0)LCD_WR_DATA8(0x08);
+        else if(_lcd_rotation==1)LCD_WR_DATA8(0xC8);
+        else if(_lcd_rotation==2)LCD_WR_DATA8(0x78);
+        else LCD_WR_DATA8(0xA8);
+}
