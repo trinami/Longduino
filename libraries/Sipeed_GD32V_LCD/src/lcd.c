@@ -583,6 +583,47 @@ void LCD_ShowString(u16 x,u16 y,const u8 *p,u16 color)
 }
 
 
+/*
+  Function description: display string
+  Entry data: x, y:  start point coordinates
+                *p:  string start address
+              mode:  1: transparent mode
+                     0: non-transparent mode
+  Return value: None
+  Note: If character position is outside the display area
+        the character is not displayed
+*/
+//----------------------------------------------------------
+void LCD_ShowStr(u16 x,u16 y,const u8 *p,u16 color, u8 mode)
+{
+    while(*p!='\0')
+    {
+		if (*p == '\r') {
+			// clear to the end of line
+			while (x < LCD_W) {
+		        LCD_ShowChar(x,y,' ',mode,color);
+				x += 8;
+			}
+			break;
+		}
+		else if (*p == '\n') {
+			// clear to the end of screen
+			while (y < LCD_H) {
+		        LCD_ShowChar(x,y,' ',mode,color);
+				if (x > (LCD_W-8)) {x=0; y+=16;}
+				x += 8;
+			}
+			break;
+		}
+        if (x > (LCD_W-8)) {x=0;y+=16;}
+        if (y > (LCD_H-16)) break;
+        LCD_ShowChar(x,y,*p,mode,color);
+        x+=8;
+        p++;
+    }
+}
+
+
 /******************************************************************************
 	   Function description: display numbers
        Entry data: base m, n exponent

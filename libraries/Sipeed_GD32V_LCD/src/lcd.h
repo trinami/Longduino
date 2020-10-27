@@ -85,6 +85,9 @@ typedef unsigned long u32;
 #define OLED_CMD  0	//Write command
 #define OLED_DATA 1	//Write data
 
+#define TRANSPARENT 1
+#define OPAQUE      0
+
 extern  u16 BACK_COLOR;   //Background color
 extern unsigned char image[12800];
 
@@ -104,6 +107,7 @@ void LCD_DrawRectangle(u16 x1, u16 y1, u16 x2, u16 y2,u16 color);
 void Draw_Circle(u16 x0,u16 y0,u8 r,u16 color);
 void LCD_ShowChar(u16 x,u16 y,u8 num,u8 mode,u16 color);
 void LCD_ShowString(u16 x,u16 y,const u8 *p,u16 color);
+void LCD_ShowStr(u16 x,u16 y,const u8 *p,u16 color, u8 mode);
 u32 mypow(u8 m,u8 n);
 void LCD_ShowNum(u16 x,u16 y,u16 num,u8 len,u16 color);
 void LCD_ShowNum1(u16 x,u16 y,float num,u8 len,u16 color);
@@ -136,6 +140,7 @@ void LCD_SetRotation(u8 rotation);
  
 #define LIGHTGREEN     	 0X841F //light green
 #define LGRAY 			     0XC618 //Light gray (PANNEL), form background color
+#define DGRAY            0X31A6 // Dark gray
 
 #define LGRAYBLUE        0XA651 //Light gray blue (middle layer color)
 #define LBBLUE           0X2B12 //Light brown blue (inverted color of selected item)
