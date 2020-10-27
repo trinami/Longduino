@@ -8,41 +8,42 @@
 /*
     Copyright (c) 2019, GigaDevice Semiconductor Inc.
 
-    Redistribution and use in source and binary forms, with or without modification, 
+    Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
 
-    1. Redistributions of source code must retain the above copyright notice, this 
+    1. Redistributions of source code must retain the above copyright notice, this
        list of conditions and the following disclaimer.
-    2. Redistributions in binary form must reproduce the above copyright notice, 
-       this list of conditions and the following disclaimer in the documentation 
+    2. Redistributions in binary form must reproduce the above copyright notice,
+       this list of conditions and the following disclaimer in the documentation
        and/or other materials provided with the distribution.
-    3. Neither the name of the copyright holder nor the names of its contributors 
-       may be used to endorse or promote products derived from this software without 
+    3. Neither the name of the copyright holder nor the names of its contributors
+       may be used to endorse or promote products derived from this software without
        specific prior written permission.
 
-    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
-IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
-INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
-NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
-PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
-WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
-ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY 
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 OF SUCH DAMAGE.
 */
 
+#include "systick.h"
 #include "drv_usb_hw.h"
 #include "cdc_acm_core.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "lcd.h"
-#include "gd32v_pjt_include.h"
+#include "usbcdc_pjt_include.h"
 
 #define PROG_ID (u8 *)"USB UART BRIDGE v0.6"
 
-usb_core_driver USB_OTG_dev = 
+usb_core_driver USB_OTG_dev =
 {
     .dev = {
         .desc = {
@@ -54,19 +55,19 @@ usb_core_driver USB_OTG_dev =
 };
 
 static uint8_t rxbuffer[UART_RXBUFFER_SIZE];
-static __IO uint16_t rxcount = 0; 
+static __IO uint16_t rxcount = 0;
 static uint8_t cdcbuffer[UART_RXBUFFER_SIZE];
 static uint8_t rcvstr[CDC_ACM_DATA_PACKET_SIZE] = {0};
 static uint8_t txbuffer[CDC_ACM_DATA_PACKET_SIZE+8] = {'^'};
-static __IO uint16_t txcount = 0; 
-static __IO uint16_t txbuffer_idx = 0; 
+static __IO uint16_t txcount = 0;
+static __IO uint16_t txbuffer_idx = 0;
 
 static uint8_t uart_sending = 0;
 
 
 //---------------------------
 static void init_clocks(void)
-{	
+{
 	// enable GPIO clocks
     rcu_periph_clock_enable(RCU_GPIOA);
     rcu_periph_clock_enable(RCU_GPIOB);
@@ -141,7 +142,7 @@ static void init_uart(uint32_t uart)
 
 //------------------------------------
 static void deinit_uart(uint32_t uart)
-{	
+{
     if ((uart != USART0) && (uart != USART2)) return;
 
     // Reset uart
@@ -247,21 +248,8 @@ void delay_ms(uint32_t count)
 	} while(delta_mtime <(SystemCoreClock/4000.0 *count ));
 }
 
-//=====================
-uint64_t get_time(void)
-{
-	uint64_t curr_mtime;
-
-	// Wait for next mtime tick
-	uint64_t tmp = get_timer_value();
-	do {
-	    curr_mtime = get_timer_value();
-	} while (curr_mtime == tmp);
-    return curr_mtime; // time in system ticks
-}
-
 //============
-int main(void)
+void setup()
 {
     // system clocks configuration
     init_clocks();
@@ -310,8 +298,9 @@ int main(void)
     #if USE_LEDS
     LEDR(1);
     #endif
+}
 
-    while (1) {
+void loop() {
         if (USBD_CONFIGURED == USB_OTG_dev.dev.cur_status) {
             if (uart_change_req > 0) {
                 //uart_wait_sent();
@@ -379,6 +368,4 @@ int main(void)
             LEDR(1);
             #endif
         }
-    }
 }
-

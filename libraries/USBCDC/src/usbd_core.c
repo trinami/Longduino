@@ -32,8 +32,8 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 OF SUCH DAMAGE.
 */
 
-#include "../Include/usbd_core.h"
-#include "../Include/drv_usb_hw.h"
+#include "usbd_core.h"
+#include "drv_usb_hw.h"
 
 /* endpoint type */
 const uint32_t ep_type[] = {

@@ -36,6 +36,12 @@ OF SUCH DAMAGE.
 #ifndef CDC_ACM_CORE_H
 #define CDC_ACM_CORE_H
 
+#include "systick.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "usbd_enum.h"
 #include "usb_ch9_std.h"
 #include "usbd_transc.h"
@@ -172,5 +178,9 @@ uint8_t cdc_acm_data_out_handler(usb_dev *pudev, uint8_t ep_id);
 uint8_t cdc_acm_EP0_RxReady(usb_dev  *pudev);
 
 void lcd_showSettings(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif  // CDC_ACM_CORE_H

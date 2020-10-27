@@ -32,8 +32,8 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 OF SUCH DAMAGE.
 */
 
-#include "../Include/usbd_enum.h"
-#include "../Include/usb_ch9_std.h"
+#include "usbd_enum.h"
+#include "usb_ch9_std.h"
 
 static usb_reqsta _usb_std_getstatus        (usb_core_driver *udev, usb_req *req);
 static usb_reqsta _usb_std_setaddress       (usb_core_driver *udev, usb_req *req);

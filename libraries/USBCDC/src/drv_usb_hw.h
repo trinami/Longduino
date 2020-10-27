@@ -35,6 +35,10 @@ OF SUCH DAMAGE.
 #ifndef __DRV_USB_HW_H
 #define __DRV_USB_HW_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "usb_conf.h"
 
 /* configure USB clock */
@@ -58,5 +62,9 @@ void usb_mdelay (const uint32_t msec);
 /* drive usb VBus */
     void usb_vbus_drive (uint8_t State);
 #endif /* USE_HOST_MODE */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __DRV_USB_HW_H */

@@ -32,8 +32,8 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 OF SUCH DAMAGE.
 */
 
-#include "../Include/usbd_enum.h"
-#include "../Include/usbd_transc.h"
+#include "usbd_enum.h"
+#include "usbd_transc.h"
 
 /*!
     \brief      USB send data in the control transaction

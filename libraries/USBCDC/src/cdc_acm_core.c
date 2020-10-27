@@ -46,8 +46,6 @@ OF SUCH DAMAGE.
 static char tmpbuf[21];
 #endif
 
-uint64_t get_time(void);
-
 static uint32_t cdc_cmd = 0xFFU;
 static uint8_t usb_cmd_buffer[CDC_ACM_CMD_PACKET_SIZE];
 static uint8_t lcd_stat = 0;
