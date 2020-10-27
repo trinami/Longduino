@@ -41,6 +41,7 @@ OF SUCH DAMAGE.
 extern "C" {
 #endif
 
+uint64_t get_time(void);
 void delay_1ms(uint32_t count);
 
 #ifdef __cplusplus

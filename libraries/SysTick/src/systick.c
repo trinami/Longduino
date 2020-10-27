@@ -35,6 +35,19 @@ OF SUCH DAMAGE.
 #include "gd32vf103.h"
 #include "systick.h"
 
+//=====================
+uint64_t get_time(void)
+{
+	uint64_t curr_mtime;
+
+	// Wait for next mtime tick
+	uint64_t tmp = get_timer_value();
+	do {
+	    curr_mtime = get_timer_value();
+	} while (curr_mtime == tmp);
+    return curr_mtime; // time in system ticks
+}
+
 /*!
     \brief      delay a time in milliseconds
     \param[in]  count: count in milliseconds
