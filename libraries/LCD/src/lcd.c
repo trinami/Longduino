@@ -1,6 +1,11 @@
 #include "lcd.h"
 #include "oledfont.h"
 #include "bmp.h"
+
+#ifndef _swap_int16_t
+#define _swap_int16_t(a, b) { int16_t t = a; a = b; b = t; }
+#endif
+
 u16 BACK_COLOR;   //Background color
 u8 _lcd_rotation = USE_HORIZONTAL;
 u16 _lcd_width = LCD_W;
@@ -432,13 +437,19 @@ void LCD_Fill(u16 xsta,u16 ysta,u16 xend,u16 yend,u16 color)
 }
 
 
+static void writeFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color)
+{
+    LCD_Fill(x, y, x+w-1, y, color);
+}
+
+
 /******************************************************************************
 	   Function description: draw a line
        Entry data: x1, y1 starting coordinates
                    x2, y2 terminating coordinates
        Return value: None
 ******************************************************************************/
-void LCD_DrawLine(u16 x1,u16 y1,u16 x2,u16 y2,u16 color)
+static void _LCD_DrawLine(u16 x1,u16 y1,u16 x2,u16 y2,u16 color)
 {
 	u16 t; 
 	int xerr=0,yerr=0,delta_x,delta_y,distance;
@@ -471,6 +482,22 @@ void LCD_DrawLine(u16 x1,u16 y1,u16 x2,u16 y2,u16 color)
 			uCol+=incy;
 		}
 	}
+}
+
+void LCD_DrawLine(u16 x1,u16 y1,u16 x2,u16 y2,u16 color)
+{
+    if (x1 == x2) {
+        if (y1 > y2)
+            LCD_Fill(x1, y2, x2, y1, color);
+        else
+            LCD_Fill(x1, y1, x2, y2, color);
+    } else if (y1 == y2) {
+        if (x1 > x2)
+            LCD_Fill(x2, y1, x2, y1, color);
+        else
+            LCD_Fill(x1, y1, x2, y2, color);
+    } else
+        _LCD_DrawLine(x1, y1, x2, y2, color);
 }
 
 
@@ -516,6 +543,118 @@ void Draw_Circle(u16 x0,u16 y0,u8 r,u16 color)
 			b--;
 		}
 	}
+}
+
+
+/******************************************************************************
+	   Function description: fill circle
+       Entry data: x0, y0 center coordinates
+                   r radius
+       Return value: None
+******************************************************************************/
+void Fill_Circle(u16 x0,u16 y0,u8 r,u16 color)
+{
+	int a,b;
+	// int di;
+	a=0;b=r;
+	while(a<=b)
+	{
+		LCD_DrawLine(x0-b,y0-a,x0+b,y0-a,color);
+		LCD_DrawLine(x0-a,y0-b,x0-a,y0+b,color);
+		LCD_DrawLine(x0-b,y0+a,x0+b,y0+a,color);
+		LCD_DrawLine(x0+a,y0-b,x0+a,y0+b,color);
+		a++;
+		if((a*a+b*b)>(r*r))//Determine whether the points to be drawn are too far away
+		{
+			b--;
+		}
+	}
+}
+
+
+void LCD_DrawTriangle(int16_t x0, int16_t y0,
+        int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t color) {
+    LCD_DrawLine(x0, y0, x1, y1, color);
+    LCD_DrawLine(x1, y1, x2, y2, color);
+    LCD_DrawLine(x2, y2, x0, y0, color);
+}
+
+
+void LCD_FillTriangle(int16_t x0, int16_t y0,
+        int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t color) {
+
+    int16_t a, b, y, last;
+
+    // Sort coordinates by Y order (y2 >= y1 >= y0)
+    if (y0 > y1) {
+        _swap_int16_t(y0, y1); _swap_int16_t(x0, x1);
+    }
+    if (y1 > y2) {
+        _swap_int16_t(y2, y1); _swap_int16_t(x2, x1);
+    }
+    if (y0 > y1) {
+        _swap_int16_t(y0, y1); _swap_int16_t(x0, x1);
+    }
+
+    if(y0 == y2) { // Handle awkward all-on-same-line case as its own thing
+        a = b = x0;
+        if(x1 < a)      a = x1;
+        else if(x1 > b) b = x1;
+        if(x2 < a)      a = x2;
+        else if(x2 > b) b = x2;
+        writeFastHLine(a, y0, b-a+1, color);
+        return;
+    }
+
+    int16_t
+    dx01 = x1 - x0,
+    dy01 = y1 - y0,
+    dx02 = x2 - x0,
+    dy02 = y2 - y0,
+    dx12 = x2 - x1,
+    dy12 = y2 - y1;
+    int32_t
+    sa   = 0,
+    sb   = 0;
+
+    // For upper part of triangle, find scanline crossings for segments
+    // 0-1 and 0-2.  If y1=y2 (flat-bottomed triangle), the scanline y1
+    // is included here (and second loop will be skipped, avoiding a /0
+    // error there), otherwise scanline y1 is skipped here and handled
+    // in the second loop...which also avoids a /0 error here if y0=y1
+    // (flat-topped triangle).
+    if(y1 == y2) last = y1;   // Include y1 scanline
+    else         last = y1-1; // Skip it
+
+    for(y=y0; y<=last; y++) {
+        a   = x0 + sa / dy01;
+        b   = x0 + sb / dy02;
+        sa += dx01;
+        sb += dx02;
+        /* longhand:
+        a = x0 + (x1 - x0) * (y - y0) / (y1 - y0);
+        b = x0 + (x2 - x0) * (y - y0) / (y2 - y0);
+        */
+        if(a > b) _swap_int16_t(a,b);
+        writeFastHLine(a, y, b-a+1, color);
+    }
+
+    // For lower part of triangle, find scanline crossings for segments
+    // 0-2 and 1-2.  This loop is skipped if y1=y2.
+    sa = dx12 * (y - y1);
+    sb = dx02 * (y - y0);
+    for(; y<=y2; y++) {
+        a   = x1 + sa / dy12;
+        b   = x0 + sb / dy02;
+        sa += dx12;
+        sb += dx02;
+        /* longhand:
+        a = x1 + (x2 - x1) * (y - y1) / (y2 - y1);
+        b = x0 + (x2 - x0) * (y - y0) / (y2 - y0);
+        */
+        if(a > b) _swap_int16_t(a,b);
+        writeFastHLine(a, y, b-a+1, color);
+    }
 }
 
 

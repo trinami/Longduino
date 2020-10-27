@@ -105,6 +105,11 @@ void LCD_Fill(u16 xsta,u16 ysta,u16 xend,u16 yend,u16 color);
 void LCD_DrawLine(u16 x1,u16 y1,u16 x2,u16 y2,u16 color);
 void LCD_DrawRectangle(u16 x1, u16 y1, u16 x2, u16 y2,u16 color);
 void Draw_Circle(u16 x0,u16 y0,u8 r,u16 color);
+void Fill_Circle(u16 x0,u16 y0,u8 r,u16 color);
+void LCD_DrawTriangle(int16_t x0, int16_t y0,
+        int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t color);
+void LCD_FillTriangle(int16_t x0, int16_t y0,
+        int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t color);
 void LCD_ShowChar(u16 x,u16 y,u8 num,u8 mode,u16 color);
 void LCD_ShowString(u16 x,u16 y,const u8 *p,u16 color);
 void LCD_ShowStr(u16 x,u16 y,const u8 *p,u16 color, u8 mode);
