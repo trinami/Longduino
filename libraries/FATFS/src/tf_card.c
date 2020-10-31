@@ -274,6 +274,7 @@ void init_timer2(void)
     \param[out] none
     \retval     none
 */
+/*
 static
 void tfcard_timer_irq (void)
 {
@@ -291,6 +292,7 @@ void tfcard_timer_irq (void)
         // }
     }
 }
+*/
 
 /*!
     \brief      this function handles Timer0 updata interrupt request.
