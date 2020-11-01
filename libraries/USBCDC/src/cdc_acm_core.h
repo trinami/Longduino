@@ -46,31 +46,7 @@ extern "C" {
 #include "usbd_enum.h"
 #include "usb_ch9_std.h"
 #include "usbd_transc.h"
-
-// ==== Conditional compile ====
-#ifdef LCD_SS_PIN
-#define USE_DISPLAY                             1
-#endif
-#define USE_LEDS                                1
-#define UART_USE_BREAK_TO_CHANGE                1
-
-// ==== Constants ====
-#define UART_RXBUFFER_SIZE                      4096
-#define UART_DEFAULT_BDR                        115200
-
-#define UART0_TXPIN                             GPIO_PIN_9
-#define UART0_RXPIN                             GPIO_PIN_10
-#define UART0_RTSPIN                            GPIO_PIN_13
-#define UART0_DTRPIN                            GPIO_PIN_14
-#define UART0_PORT                              GPIOA
-#define UART0_RTS_DTR_MODE                      GPIO_MODE_AF_OD
-
-#define UART2_TXPIN                             GPIO_PIN_10
-#define UART2_RXPIN                             GPIO_PIN_11
-#define UART2_RTSPIN                            GPIO_PIN_13
-#define UART2_DTRPIN                            GPIO_PIN_14
-#define UART2_PORT                              GPIOB
-#define UART2_RTS_DTR_MODE                      GPIO_MODE_AF_PP
+#include "cdc_acm_uart.h"
 
 // ==== USB/CDC constants ====
 #define USB_DESCTYPE_CS_INTERFACE               0x24
@@ -100,7 +76,7 @@ typedef struct
     uint8_t  bCharFormat; /* stop bits */
     uint8_t  bParityType; /* parity */
     uint8_t  bDataBits;   /* data bits */
-}line_coding_struct;
+} line_coding_struct;
 
 typedef struct
 {
@@ -156,14 +132,9 @@ extern usb_class_core usbd_cdc_cb;
 extern line_coding_struct linecoding;
 extern uint32_t cdc_acm_receive_count;
 extern uint32_t cdc_acm_send_count;
-extern __IO uint32_t uart_receive_count;
-extern __IO uint32_t uart_send_count;
-extern __IO uint32_t uart_error_count;
 extern __IO uint8_t cdc_acm_packet_sent;
 extern __IO uint8_t cdc_acm_packet_receive;
 extern __IO uint32_t cdc_acm_receive_length;
-extern __IO uint32_t active_uart;
-extern __IO uint32_t uart_change_req;
 
 // ==== function declarations ====
 
@@ -179,8 +150,6 @@ uint8_t cdc_acm_data_out_handler(usb_dev *pudev, uint8_t ep_id);
 
 // command data received on control endpoint
 uint8_t cdc_acm_EP0_RxReady(usb_dev  *pudev);
-
-void lcd_showUartSettings(void);
 
 #ifdef __cplusplus
 }
