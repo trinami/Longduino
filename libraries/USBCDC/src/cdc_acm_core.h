@@ -36,6 +36,7 @@ OF SUCH DAMAGE.
 #ifndef CDC_ACM_CORE_H
 #define CDC_ACM_CORE_H
 
+#include "pins_arduino.h"
 #include "systick.h"
 
 #ifdef __cplusplus
