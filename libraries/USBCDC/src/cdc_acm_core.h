@@ -153,14 +153,14 @@ extern usb_descriptor_configuration_set_struct configuration_descriptor;
 extern usb_class_core usbd_cdc_cb;
 
 extern line_coding_struct linecoding;
-extern uint32_t receive_count;
-extern uint32_t send_count;
+extern uint32_t cdc_acm_receive_count;
+extern uint32_t cdc_acm_send_count;
 extern __IO uint32_t uart_receive_count;
 extern __IO uint32_t uart_send_count;
 extern __IO uint32_t uart_error_count;
-extern __IO uint8_t packet_sent;
-extern __IO uint8_t packet_receive;
-extern __IO uint32_t receive_length;
+extern __IO uint8_t cdc_acm_packet_sent;
+extern __IO uint8_t cdc_acm_packet_receive;
+extern __IO uint32_t cdc_acm_receive_length;
 extern __IO uint32_t active_uart;
 extern __IO uint32_t uart_change_req;
 
@@ -179,7 +179,7 @@ uint8_t cdc_acm_data_out_handler(usb_dev *pudev, uint8_t ep_id);
 // command data received on control endpoint
 uint8_t cdc_acm_EP0_RxReady(usb_dev  *pudev);
 
-void lcd_showSettings(void);
+void lcd_showUartSettings(void);
 
 #ifdef __cplusplus
 }

@@ -300,23 +300,23 @@ void loop() {
                     init_uart(USART2);
                 }
                 uart_change_req = 0;
-                lcd_showSettings();
+                lcd_showUartSettings();
             }
 
             // === USB CDC -> UART ===
-            if (packet_receive) {
-                if (receive_length > 0) {
+            if (cdc_acm_packet_receive) {
+                if (cdc_acm_receive_length > 0) {
                     uart_wait_sent();
-                    memcpy(txbuffer, rcvstr, receive_length);
-                    uart_send_data(receive_length);
+                    memcpy(txbuffer, rcvstr, cdc_acm_receive_length);
+                    uart_send_data(cdc_acm_receive_length);
                 }
-                packet_receive = 0;
+                cdc_acm_packet_receive = 0;
                 // receive more data from host
                 usbd_ep_recev(&USB_OTG_dev, CDC_ACM_DATA_OUT_EP, rcvstr, CDC_ACM_DATA_PACKET_SIZE);
             }
 
             // === UART -> USB CDC ===
-            if (packet_sent) {
+            if (cdc_acm_packet_sent) {
                 // free to send new USB packet
                 usart_interrupt_disable(active_uart, USART_INT_RBNE);
                 if (rxcount > 0) {
@@ -325,9 +325,9 @@ void loop() {
                     rxcount = 0;
                     memcpy(cdcbuffer, rxbuffer, inbuffer);
                     usart_interrupt_enable(active_uart, USART_INT_RBNE);
-                    packet_sent = 0;
+                    cdc_acm_packet_sent = 0;
                     usbd_ep_send(&USB_OTG_dev, CDC_ACM_DATA_IN_EP, cdcbuffer, inbuffer);
-                    send_count += inbuffer;
+                    cdc_acm_send_count += inbuffer;
                 }
                 else usart_interrupt_enable(active_uart, USART_INT_RBNE);
             }

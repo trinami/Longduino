@@ -54,14 +54,14 @@ static uint8_t dtr = 1;
 static uint8_t brk = 0;
 static uint64_t break_time = 0;
 
-uint32_t receive_count = 0;
-uint32_t send_count = 0;
+uint32_t cdc_acm_receive_count = 0;
+uint32_t cdc_acm_send_count = 0;
 __IO uint32_t uart_receive_count = 0;
 __IO uint32_t uart_send_count = 0;
 __IO uint32_t uart_error_count = 0;
-__IO uint8_t packet_sent = 1U;
-__IO uint8_t packet_receive = 1U;
-__IO uint32_t receive_length = 0U;
+__IO uint8_t cdc_acm_packet_sent = 1U;
+__IO uint8_t cdc_acm_packet_receive = 1U;
+__IO uint32_t cdc_acm_receive_length = 0U;
 __IO uint32_t active_uart = 0;
 __IO uint32_t uart_change_req = 0;
 
@@ -309,9 +309,9 @@ uint8_t cdc_acm_data_out_handler (usb_dev *pudev, uint8_t ep_id)
     } 
     else if ((CDC_ACM_DATA_OUT_EP & 0x7F) == ep_id) 
     {
-        packet_receive = 1;
-        receive_length = usbd_rxcount_get(pudev, CDC_ACM_DATA_OUT_EP);
-        receive_count += receive_length;
+        cdc_acm_packet_receive = 1;
+        cdc_acm_receive_length = usbd_rxcount_get(pudev, CDC_ACM_DATA_OUT_EP);
+        cdc_acm_receive_count += cdc_acm_receive_length;
         return USBD_OK;
     }
     return USBD_FAIL;
@@ -326,7 +326,7 @@ uint8_t cdc_acm_data_in_handler (usb_dev *pudev, uint8_t ep_id)
         if ((transc->xfer_len % transc->max_len == 0) && (transc->xfer_len != 0)) {
             usbd_ep_send (pudev, ep_id, NULL, 0U);
         } else {
-            packet_sent = 1;
+            cdc_acm_packet_sent = 1;
         }
         return USBD_OK;
     } 
@@ -334,7 +334,7 @@ uint8_t cdc_acm_data_in_handler (usb_dev *pudev, uint8_t ep_id)
 }
 
 //-------------------------
-void lcd_showSettings(void)
+void lcd_showUartSettings(void)
 {
     #if USE_DISPLAY
     LCD_ShowStr(0, 16, (u8 *)("\r"), CYAN, OPAQUE);
@@ -379,7 +379,7 @@ static void lcd_showStatus(void)
     uint8_t pos = strlen(tmpbuf) * 8;
     sprintf(tmpbuf, " %lu\r", uart_error_count);
     LCD_ShowStr(pos, 48, (u8 *)tmpbuf, RED, OPAQUE);
-    sprintf(tmpbuf, "U  %lu %lu\r", send_count, receive_count);
+    sprintf(tmpbuf, "U  %lu %lu\r", cdc_acm_send_count, cdc_acm_receive_count);
     LCD_ShowStr(0, 64, (u8 *)tmpbuf, YELLOW, OPAQUE);
     lcd_stat = 1;
     #endif
@@ -442,7 +442,7 @@ uint8_t cdc_acm_req_handler (usb_dev *pudev, usb_req *req)
             }
             rts = (req->wValue >> 1) & 1;
             dtr = req->wValue & 1;
-            lcd_showSettings();
+            lcd_showUartSettings();
             break;
         case SEND_BREAK:
             #if UART_USE_BREAK_TO_CHANGE
@@ -455,7 +455,7 @@ uint8_t cdc_acm_req_handler (usb_dev *pudev, usb_req *req)
             if ((active_uart == USART0) || (active_uart == USART2)) {
                 usart_send_break(active_uart);
                 brk = (req->wValue != 0);
-                lcd_showSettings();
+                lcd_showUartSettings();
             }
             #endif
             break;
@@ -465,8 +465,8 @@ uint8_t cdc_acm_req_handler (usb_dev *pudev, usb_req *req)
                 uart_send_count = 0;
                 uart_receive_count = 0;
                 uart_error_count = 0;
-                send_count = 0;
-                receive_count = 0;
+                cdc_acm_send_count = 0;
+                cdc_acm_receive_count = 0;
             }
             break;
         case SELECT_UART:
@@ -476,8 +476,8 @@ uint8_t cdc_acm_req_handler (usb_dev *pudev, usb_req *req)
         case GET_STATUS:
             usb_cmd_buffer[0] = (active_uart == USART0) ? 0 : 1;
             usb_cmd_buffer[1] = dtr | (rts << 1);
-            u32tocmdbuf(2, send_count);
-            u32tocmdbuf(6, receive_count);
+            u32tocmdbuf(2, cdc_acm_send_count);
+            u32tocmdbuf(6, cdc_acm_receive_count);
             u32tocmdbuf(10, uart_send_count);
             u32tocmdbuf(14, uart_receive_count);
             u32tocmdbuf(18, uart_error_count);
@@ -515,7 +515,7 @@ uint8_t cdc_acm_EP0_RxReady (usb_dev *pudev)
             usart_stop_bit_set(active_uart, linecoding.bCharFormat);
             usart_parity_config(active_uart, linecoding.bParityType);
         }
-        lcd_showSettings();
+        lcd_showUartSettings();
 
         cdc_cmd = NO_CMD;
     }
