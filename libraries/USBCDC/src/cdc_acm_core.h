@@ -47,7 +47,9 @@ extern "C" {
 #include "usbd_transc.h"
 
 // ==== Conditional compile ====
+#ifdef LCD_SS_PIN
 #define USE_DISPLAY                             1
+#endif
 #define USE_LEDS                                1
 #define UART_USE_BREAK_TO_CHANGE                1
 
