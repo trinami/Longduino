@@ -37,33 +37,21 @@ OF SUCH DAMAGE.
 #include <stdlib.h>
 #include <string.h>
 #include "cdc_acm_core.h"
-#include "lcd.h"
 
 #define USBD_VID                          0x28e9
 #define USBD_PID                          0x018a
 
-#if USE_DISPLAY
-static char tmpbuf[21];
-static uint8_t lcd_stat = 0;
-#endif
-
 static uint32_t cdc_cmd = 0xFFU;
 static uint8_t usb_cmd_buffer[CDC_ACM_CMD_PACKET_SIZE];
-static uint8_t rts = 1;
-static uint8_t dtr = 1;
-static uint8_t brk = 0;
-static uint64_t break_time = 0;
+uint8_t cdc_acm_rts = 1;
+uint8_t cdc_acm_dtr = 1;
+uint8_t cdc_acm_brk = 0;
 
 uint32_t cdc_acm_receive_count = 0;
 uint32_t cdc_acm_send_count = 0;
-__IO uint32_t uart_receive_count = 0;
-__IO uint32_t uart_send_count = 0;
-__IO uint32_t uart_error_count = 0;
 __IO uint8_t cdc_acm_packet_sent = 1U;
 __IO uint8_t cdc_acm_packet_receive = 1U;
 __IO uint32_t cdc_acm_receive_length = 0U;
-__IO uint32_t active_uart = 0;
-__IO uint32_t uart_change_req = 0;
 
 //usbd_int_cb_struct *usbd_int_fops = NULL;
 
@@ -333,65 +321,23 @@ uint8_t cdc_acm_data_in_handler (usb_dev *pudev, uint8_t ep_id)
     return USBD_FAIL;
 }
 
-//-------------------------
-void lcd_showUartSettings(void)
-{
-    #if USE_DISPLAY
-    LCD_ShowStr(0, 16, (u8 *)("\r"), CYAN, OPAQUE);
-    LCD_ShowStr(0, 64, (u8 *)("\r"), CYAN, OPAQUE);
-    sprintf(tmpbuf, "DTR=%d RTS=%d\r", dtr, rts);
-    LCD_ShowStr(0, 48, (u8 *)tmpbuf, CYAN, OPAQUE);
-    sprintf(tmpbuf, "%s", (brk) ? "BREAK" : "     ");
-    LCD_ShowStr(120, 48, (u8 *)tmpbuf, CYAN, OPAQUE);
-
-    char parity = 'N';
-    if (linecoding.bParityType == 2) parity = 'E';
-    else if (linecoding.bParityType == 3) parity = 'O';
-    char stbits[4] = "1";
-    if (linecoding.bCharFormat == 1) sprintf(stbits, "0.5");
-    else if (linecoding.bCharFormat == 2) sprintf(stbits, "2");
-    else if (linecoding.bCharFormat == 3) sprintf(stbits, "1.5");
-    char actu = '?';
-    if (active_uart == USART0) actu = '0';
-    else if (active_uart == USART2) actu = '1';
-    sprintf(tmpbuf, "UART%c: %lu %u%c%s\r", actu, linecoding.dwDTERate, linecoding.bDataBits, parity, stbits);
-    LCD_ShowStr(0, 32, (u8 *)tmpbuf, YELLOW, OPAQUE);
-    #endif
-}
-
-//------------------------------
-static void lcd_showStatus(void)
-{
-    #if USE_DISPLAY
-    char actu = '?';
-    if (active_uart == USART0) actu = '0';
-    else if (active_uart == USART2) actu = '1';
-    else {
-        LCD_ShowStr(0, 16, (u8 *)("\n"), BLACK, OPAQUE);
-        return;
-    }
-    sprintf(tmpbuf, "Active UART: %c\r", actu);
-    LCD_ShowStr(0, 16, (u8 *)tmpbuf, GREEN, OPAQUE);
-    sprintf(tmpbuf, "S> %lu\r", uart_send_count);
-    LCD_ShowStr(0, 32, (u8 *)tmpbuf, CYAN, OPAQUE);
-    sprintf(tmpbuf, "S< %lu\r", uart_receive_count);
-    LCD_ShowStr(0, 48, (u8 *)tmpbuf, CYAN, OPAQUE);
-    uint8_t pos = strlen(tmpbuf) * 8;
-    sprintf(tmpbuf, " %lu\r", uart_error_count);
-    LCD_ShowStr(pos, 48, (u8 *)tmpbuf, RED, OPAQUE);
-    sprintf(tmpbuf, "U  %lu %lu\r", cdc_acm_send_count, cdc_acm_receive_count);
-    LCD_ShowStr(0, 64, (u8 *)tmpbuf, YELLOW, OPAQUE);
-    lcd_stat = 1;
-    #endif
-}
-
 //-------------------------------------------------
-static void u32tocmdbuf(uint8_t idx, uint32_t data)
+void cdc_acm_u8tocmdbuf(uint8_t idx, uint8_t data)
+{
+    usb_cmd_buffer[idx] = (uint8_t)(data);
+}
+
+void cdc_acm_u32tocmdbuf(uint8_t idx, uint32_t data)
 {
     usb_cmd_buffer[idx] = (uint8_t)(data);
     usb_cmd_buffer[idx+1] = (uint8_t)(data >> 8);
     usb_cmd_buffer[idx+2] = (uint8_t)(data >> 16);
     usb_cmd_buffer[idx+3] = (uint8_t)(data >> 24);
+}
+
+uint8_t* cdc_acm_get_cmdbuf(void)
+{
+    return usb_cmd_buffer;
 }
 
 /*!
@@ -423,7 +369,7 @@ uint8_t cdc_acm_req_handler (usb_dev *pudev, usb_req *req)
             pudev->dev.transc_out[0].remain_len = req->wLength;
             break;
         case GET_LINE_CODING:
-            u32tocmdbuf(0, linecoding.dwDTERate);
+            cdc_acm_u32tocmdbuf(0, linecoding.dwDTERate);
             usb_cmd_buffer[4] = linecoding.bCharFormat;
             usb_cmd_buffer[5] = linecoding.bParityType;
             usb_cmd_buffer[6] = linecoding.bDataBits;
@@ -432,60 +378,15 @@ uint8_t cdc_acm_req_handler (usb_dev *pudev, usb_req *req)
             pudev->dev.transc_in[0].remain_len = req->wLength;
             break;
         case SET_CONTROL_LINE_STATE:
-            if (active_uart == USART0) {
-                ((req->wValue >> 1) & 1) ? gpio_bit_set(GPIOA, UART0_RTSPIN) : gpio_bit_reset(GPIOA, UART0_RTSPIN);
-                (req->wValue & 1) ? gpio_bit_set(GPIOA, UART0_DTRPIN) : gpio_bit_reset(GPIOA, UART0_DTRPIN);
-            }
-            else if (active_uart == USART2) {
-                ((req->wValue >> 1) & 1) ? gpio_bit_set(GPIOA, UART2_RTSPIN) : gpio_bit_reset(GPIOA, UART2_RTSPIN);
-                (req->wValue & 1) ? gpio_bit_set(GPIOA, UART2_DTRPIN) : gpio_bit_reset(GPIOA, UART2_DTRPIN);
-            }
-            rts = (req->wValue >> 1) & 1;
-            dtr = req->wValue & 1;
-            lcd_showUartSettings();
+            cdc_acm_rts = (req->wValue >> 1) & 1;
+            cdc_acm_dtr = req->wValue & 1;
+            cdc_acm_set_control_line_state(cdc_acm_rts, cdc_acm_dtr);
             break;
         case SEND_BREAK:
-            #if UART_USE_BREAK_TO_CHANGE
-            if ((get_time() - break_time) > 2000) {
-                if (active_uart == USART0) uart_change_req = 2;
-                else uart_change_req = 1;
-                break_time = get_time();
-            }
-            #else
-            if ((active_uart == USART0) || (active_uart == USART2)) {
-                usart_send_break(active_uart);
-                brk = (req->wValue != 0);
-                lcd_showUartSettings();
-            }
-            #endif
-            break;
-        case SHOW_STATUS:
-            lcd_showStatus();
-            if (req->wValue & 1) {
-                uart_send_count = 0;
-                uart_receive_count = 0;
-                uart_error_count = 0;
-                cdc_acm_send_count = 0;
-                cdc_acm_receive_count = 0;
-            }
-            break;
-        case SELECT_UART:
-            if (req->wValue == 0) uart_change_req = 1;
-            else if (req->wValue == 1) uart_change_req = 2;
-            break;
-        case GET_STATUS:
-            usb_cmd_buffer[0] = (active_uart == USART0) ? 0 : 1;
-            usb_cmd_buffer[1] = dtr | (rts << 1);
-            u32tocmdbuf(2, cdc_acm_send_count);
-            u32tocmdbuf(6, cdc_acm_receive_count);
-            u32tocmdbuf(10, uart_send_count);
-            u32tocmdbuf(14, uart_receive_count);
-            u32tocmdbuf(18, uart_error_count);
-            /* send the request data to the host */
-            pudev->dev.transc_in[0].xfer_buf = usb_cmd_buffer;
-            pudev->dev.transc_in[0].remain_len = req->wLength;
+            cdc_acm_brk = cdc_acm_send_break(req->wValue != 0);
             break;
         default:
+            return cdc_acm_custom_req_handler(pudev, req);
             break;
     }
 
@@ -509,13 +410,7 @@ uint8_t cdc_acm_EP0_RxReady (usb_dev *pudev)
         linecoding.bCharFormat = usb_cmd_buffer[4] & 3;
         linecoding.bParityType = usb_cmd_buffer[5];
         linecoding.bDataBits = usb_cmd_buffer[6];
-        if ((active_uart == USART0) || (active_uart == USART2)) {
-            usart_baudrate_set(active_uart, linecoding.dwDTERate);
-            usart_word_length_set(active_uart, linecoding.bDataBits);
-            usart_stop_bit_set(active_uart, linecoding.bCharFormat);
-            usart_parity_config(active_uart, linecoding.bParityType);
-        }
-        lcd_showUartSettings();
+        cdc_acm_set_line_coding(&linecoding);
 
         cdc_cmd = NO_CMD;
     }
@@ -534,4 +429,3 @@ usb_class_core usbd_cdc_cb = {
     .data_in         = cdc_acm_data_in_handler,
     .data_out        = cdc_acm_data_out_handler
 };
-

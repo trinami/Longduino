@@ -46,7 +46,6 @@ extern "C" {
 #include "usbd_enum.h"
 #include "usb_ch9_std.h"
 #include "usbd_transc.h"
-#include "cdc_acm_uart.h"
 
 // ==== USB/CDC constants ====
 #define USB_DESCTYPE_CS_INTERFACE               0x24
@@ -130,6 +129,11 @@ extern usb_descriptor_configuration_set_struct configuration_descriptor;
 extern usb_class_core usbd_cdc_cb;
 
 extern line_coding_struct linecoding;
+
+extern uint8_t cdc_acm_rts;
+extern uint8_t cdc_acm_dtr;
+extern uint8_t cdc_acm_brk;
+
 extern uint32_t cdc_acm_receive_count;
 extern uint32_t cdc_acm_send_count;
 extern __IO uint8_t cdc_acm_packet_sent;
@@ -150,6 +154,15 @@ uint8_t cdc_acm_data_out_handler(usb_dev *pudev, uint8_t ep_id);
 
 // command data received on control endpoint
 uint8_t cdc_acm_EP0_RxReady(usb_dev  *pudev);
+
+void cdc_acm_u8tocmdbuf(uint8_t idx, uint8_t data);
+void cdc_acm_u32tocmdbuf(uint8_t idx, uint32_t data);
+uint8_t* cdc_acm_get_cmdbuf(void);
+
+extern void cdc_acm_set_control_line_state(uint8_t rts, uint8_t dtr);
+extern uint8_t cdc_acm_send_break(uint8_t brk);
+extern void cdc_acm_set_line_coding(line_coding_struct* linecoding);
+extern uint8_t cdc_acm_custom_req_handler(usb_dev *pudev, usb_req *req);
 
 #ifdef __cplusplus
 }

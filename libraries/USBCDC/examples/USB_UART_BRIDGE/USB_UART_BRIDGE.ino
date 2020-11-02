@@ -34,7 +34,7 @@ OF SUCH DAMAGE.
 
 #include "systick.h"
 #include "drv_usb_hw.h"
-#include "cdc_acm_core.h"
+#include "cdc_acm_uart.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

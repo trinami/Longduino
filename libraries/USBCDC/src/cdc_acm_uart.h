@@ -1,6 +1,8 @@
 #ifndef CDC_ACM_UART_H
 #define CDC_ACM_UART_H
 
+#include "cdc_acm_core.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -11,6 +13,7 @@ extern "C" {
 #endif
 #define USE_LEDS                                1
 #define UART_USE_BREAK_TO_CHANGE                1
+#define ENABLE_CUSTOM_REQUESTS                  1
 
 // ==== Constants ====
 #define UART_RXBUFFER_SIZE                      4096
