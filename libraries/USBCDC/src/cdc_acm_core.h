@@ -47,6 +47,8 @@ extern "C" {
 #include "usb_ch9_std.h"
 #include "usbd_transc.h"
 
+#define USB_STRING_COUNT                    4U
+
 // ==== USB/CDC constants ====
 #define USB_DESCTYPE_CS_INTERFACE               0x24
 #define USB_CDC_ACM_CONFIG_DESC_SIZE            0x43

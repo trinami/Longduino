@@ -42,7 +42,7 @@ OF SUCH DAMAGE.
 
 #define USB_STR_DESC_MAX_SIZE               64
 
-#define USB_STRING_COUNT                    4U
+//#define USB_STRING_COUNT                    4U
 
 /* endpoint count used by the CDC ACM device */
 #define CDC_ACM_CMD_EP                     EP2_IN
