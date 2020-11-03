@@ -53,11 +53,11 @@ usbh_host usb_host = {
   * @param  None
   * @retval None
   */
-int main(void)
+void setup()
 {
     eclic_global_interrupt_enable();
 
-	eclic_priority_group_set(ECLIC_PRIGROUP_LEVEL2_PRIO2);
+    eclic_priority_group_set(ECLIC_PRIGROUP_LEVEL2_PRIO2);
 
     usb_rcu_config();
 
@@ -70,9 +70,9 @@ int main(void)
 
     /* enable interrupts */
     usb_intr_config();
+}
 
-    while (1) {
-        /* Host state handler */
-        usbh_core_task (&usbh_drv_core, &usb_host);
-    }
+void loop() {
+    /* Host state handler */
+    usbh_core_task (&usbh_drv_core, &usb_host);
 }
