@@ -32,9 +32,9 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 OF SUCH DAMAGE.
 */
 
-#include "../Include/drv_usb_core.h"
-#include "../Include/drv_usb_host.h"
-#include "../Include/drv_usbh_int.h"
+#include "drv_usb_core.h"
+#include "drv_usb_host.h"
+#include "drv_usbh_int.h"
 
 #if defined (__GNUC__)        /*!< GNU compiler */
     #pragma GCC optimize ("O0")

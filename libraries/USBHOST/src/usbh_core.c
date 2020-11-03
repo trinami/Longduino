@@ -32,11 +32,11 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 OF SUCH DAMAGE.
 */
 
-#include "../Include/drv_usb_hw.h"
-#include "../Include/usbh_pipe.h"
-#include "../Include/usbh_enum.h"
-#include "../Include/usbh_core.h"
-#include "../Include/drv_usbh_int.h"
+#include "drv_usb_hw.h"
+#include "usbh_pipe.h"
+#include "usbh_enum.h"
+#include "usbh_core.h"
+#include "drv_usbh_int.h"
 
 uint8_t usbh_sof (usb_core_driver *pudev);
 

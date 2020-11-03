@@ -32,8 +32,8 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 OF SUCH DAMAGE.
 */
 
-#include "../Include/usbh_transc.h"
-#include "../Include/usbh_enum.h"
+#include "usbh_transc.h"
+#include "usbh_enum.h"
 
 static void usbh_devdesc_parse (usb_desc_dev *cfg_desc, uint8_t *buf, uint16_t len);
 static void usbh_cfgset_parse  (usb_dev_prop *udev, uint8_t *buf);

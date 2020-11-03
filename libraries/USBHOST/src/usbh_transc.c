@@ -32,8 +32,8 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 OF SUCH DAMAGE.
 */
 
-#include "../Include/drv_usb_hw.h"
-#include "../Include/usbh_transc.h"
+#include "drv_usb_hw.h"
+#include "usbh_transc.h"
 
 /*!
     \brief      prepare a pipe and start a transfer
