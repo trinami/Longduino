@@ -35,10 +35,19 @@ OF SUCH DAMAGE.
 #ifndef __USB_CONF_H
 #define __USB_CONF_H
 
+#include "Arduino.h"
 #include "gd32vf103.h"
 //#include "gd32vf103C_start.h"
 
 #include <stddef.h>
+
+#ifndef FALSE
+#define FALSE 0
+#endif
+#ifndef TRUE
+#define TRUE (!FALSE)
+#endif
+
 #define USE_USB_FS
 #ifdef USE_USB_FS
     #define USB_FS_CORE
@@ -54,6 +63,10 @@ OF SUCH DAMAGE.
     #define TX1_FIFO_FS_SIZE                        128
     #define TX2_FIFO_FS_SIZE                        0
     #define TX3_FIFO_FS_SIZE                        0
+
+    #define USB_RX_FIFO_FS_SIZE                            128
+    #define USB_HTX_NPFIFO_FS_SIZE                         96
+    #define USB_HTX_PFIFO_FS_SIZE                          96
 #endif /* USB_FS_CORE */
 
 #ifdef USB_HS_CORE
@@ -77,14 +90,19 @@ OF SUCH DAMAGE.
     #define USB_OTG_HS_DEDICATED_EP1_ENABLED
 #endif /* USB_HS_CORE */
 
-#define USB_SOF_OUTPUT              1
-#define USB_LOW_POWER               1
-
 //#define VBUS_SENSING_ENABLED
 
 //#define USE_HOST_MODE
-#define USE_DEVICE_MODE
+//#define USE_DEVICE_MODE
 //#define USE_OTG_MODE
+
+#ifdef USE_HOST_MODE
+#define USB_SOF_OUTPUT                                     0
+#define USB_LOW_POWER                                      0
+#else
+#define USB_SOF_OUTPUT              1
+#define USB_LOW_POWER               1
+#endif
 
 #ifndef USB_FS_CORE
     #ifndef USB_HS_CORE
