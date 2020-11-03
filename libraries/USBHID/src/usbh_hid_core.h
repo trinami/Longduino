@@ -35,6 +35,10 @@ OF SUCH DAMAGE.
 #ifndef __USBH_HID_CORE_H
 #define __USBH_HID_CORE_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "usb_hid.h"
 #include "usbh_enum.h"
 #include "usbh_transc.h"
@@ -122,5 +126,18 @@ usbh_status usbh_set_report (usb_core_driver *pudev,
                              uint8_t  report_id,
                              uint8_t  report_len,
                              uint8_t *report_buff);
+
+#if !USE_DISPLAY
+#define lcd_log_print(a,o,c)
+#define lcd_rectangle_fill(sx,sy,ex,ey,c)
+#define lcd_char_display(x,y,c,cf)
+#define lcd_rectangle_draw(sx,sy,ex,ey,p)
+#define lcd_hline_draw(x,sy,ey,c,w)
+#define lcd_log_text_zone_clear(sx,sy,w,h)
+#endif
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __USBH_HID_CORE_H */

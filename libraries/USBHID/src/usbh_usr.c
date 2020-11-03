@@ -36,9 +36,12 @@ OF SUCH DAMAGE.
 #include "usbh_usr.h"
 #include "usbh_hid_mouse.h"
 #include "usbh_hid_keybd.h"
+#if USE_DISPLAY
 #include "lcd_log.h"
+#endif
 #include <string.h>
-#include "gd32vf103v_lcd_eval.h"
+
+#define BUTTON_CET 8
 
 #define SMALL_FONT_COLUMN_WIDTH    8
 #define SMALL_FONT_LINE_WIDTH      16
@@ -56,9 +59,11 @@ uint8_t  button_pressed_flag = 0;
 
 extern int16_t  x_loc, y_loc;
 extern __IO int16_t prev_x, prev_y;
-extern uint16_t LINE;
 
+#if USE_DISPLAY
+extern uint16_t LINE;
 extern char_format_struct charform;
+#endif
 
 /* points to the DEVICE_PROP structure of current device */
 usbh_user_cb user_callback_funs =
@@ -126,12 +131,15 @@ void usbh_user_init(void)
         startup = 1U;
 
         /* configure the User key */
-        gd_eval_key_init(KEY_CET, KEY_MODE_GPIO);
+	pinMode(BUTTON_CET, INPUT);
 
+#if USE_DISPLAY
         exmc_lcd_init();
+#endif
 
         usb_mdelay(50);
 
+#if USE_DISPLAY
         lcd_init();
 
         lcd_log_init();
@@ -143,6 +151,7 @@ void usbh_user_init(void)
         charform.char_color = LCD_COLOR_RED;
 
         lcd_log_footer_set((uint8_t *)MSG_HOST_FOOTER, 60);
+#endif
     }
 }
 
@@ -182,7 +191,9 @@ void usbh_user_unrecovered_error (void)
 */
 void usbh_user_device_disconnected (void)
 {
+#if USE_DISPLAY
     LINE = 30;
+#endif
 
     lcd_log_text_zone_clear(30, 0, 210, 320);
 
@@ -357,7 +368,7 @@ usbh_user_status usbh_user_userinput(void)
     usbh_user_status usbh_usr_status = USBH_USER_NO_RESP;
 
     /*key B3 is in polling mode to detect user action */
-    if (SET != gd_eval_key_state_get(KEY_CET)) {
+    if (HIGH != digitalRead(BUTTON_CET)) {
         usbh_usr_status = USBH_USER_RESP_OK;
     }
 
@@ -397,8 +408,10 @@ void usr_mouse_init (void)
     hid_mouse_button_released(1);
     hid_mouse_button_released(2);
 
+#if USE_DISPLAY
     charform.char_color = LCD_COLOR_GREEN;
     charform.bk_color = LCD_COLOR_BLACK;
+#endif
 
     lcd_char_display (184, 44, 'x', charform);
 
@@ -446,7 +459,9 @@ void usr_mouse_process_data(hid_mouse_data_struct *data)
 */
 void  usr_keybrd_init (void)
 {
+#if USE_DISPLAY
     LINE = 190;
+#endif
 
     lcd_rectangle_fill(30, 0, 210, 320, LCD_COLOR_BLACK);
 
@@ -489,11 +504,16 @@ void usr_keybrd_process_data (uint8_t data)
             keybrd_char_ypos += SMALL_FONT_COLUMN_WIDTH;
         }
 
+#if USE_DISPLAY
         charform.char_color = LCD_COLOR_BLACK;
+#endif
 
         lcd_char_display(keybrd_char_xpos, keybrd_char_ypos, ' ', charform);
     } else {
+#if USE_DISPLAY
         charform.char_color = LCD_COLOR_WHITE;
+#endif
+
         lcd_char_display(keybrd_char_xpos, keybrd_char_ypos, data, charform);
 
         /* update the cursor position on lcd */

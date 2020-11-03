@@ -36,7 +36,6 @@ OF SUCH DAMAGE.
 #include "drv_usb_core.h"
 #include "usbh_usr.h"
 #include "usbh_hid_core.h"
-#include "gd32vf103v_eval.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

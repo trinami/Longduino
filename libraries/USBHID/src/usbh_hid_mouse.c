@@ -40,7 +40,9 @@ int16_t  prev_x = 0, prev_y = 0;
 static void mouse_init    (void);
 static void mouse_decode  (uint8_t *data);
 
+#if USE_DISPLAY
 extern char_format_struct charform;
+#endif
 
 hid_mouse_data_struct hid_mouse_data;
 
@@ -169,7 +171,9 @@ void hid_mouse_update_position (int8_t x, int8_t y)
 
         lcd_rectangle_fill(81, 41, 190, 280, LCD_COLOR_BLACK);
 
+#if USE_DISPLAY
         charform.char_color = LCD_COLOR_GREEN;
+#endif
 
         lcd_char_display (MOUSE_WINDOW_X - y_loc, 
                           MOUSE_WINDOW_Y + x_loc,

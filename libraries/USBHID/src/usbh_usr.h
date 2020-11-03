@@ -35,6 +35,10 @@ OF SUCH DAMAGE.
 #ifndef USBH_USR_H
 #define USBH_USR_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "usbh_core.h"
 #include "usbh_hid_core.h"
 #include "usb_conf.h"
@@ -79,5 +83,9 @@ usbh_user_status usbh_user_userinput (void);
 void usbh_user_device_not_supported (void);
 /* user operation when unrecoveredError happens */
 void usbh_user_unrecovered_error (void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* USBH_USR_H */
