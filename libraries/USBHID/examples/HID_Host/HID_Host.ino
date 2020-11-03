@@ -42,7 +42,7 @@ OF SUCH DAMAGE.
 #include <string.h>
 
 
-usb_core_driver usb_hid_core;
+usb_core_driver usbh_drv_core;
 
 usbh_host usb_host = {
     .class_cb = &usbh_hid_cb,
@@ -67,13 +67,13 @@ int main(void)
     /* configure GPIO pin used for switching VBUS power and charge pump I/O */
     usb_vbus_config();
 
-    usbh_init (&usb_hid_core, USB_CORE_ENUM_FS, &usb_host);
+    usbh_init (&usbh_drv_core, USB_CORE_ENUM_FS, &usb_host);
 
     /* enable interrupts */
     usb_intr_config();
 
     while (1) {
         /* Host state handler */
-        usbh_core_task (&usb_hid_core, &usb_host);
+        usbh_core_task (&usbh_drv_core, &usb_host);
     }
 }

@@ -1,5 +1,5 @@
 /*!
-    \file  gd32vf103_it.h
+    \file  gd32vf103_usbh_it.h
     \brief the header file of the ISR
 
     \version 2019-6-5, V1.0.0, firmware for GD32VF103

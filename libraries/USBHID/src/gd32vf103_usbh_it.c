@@ -1,5 +1,5 @@
 /*!
-    \file  gd32vf103_it.c
+    \file  gd32vf103_usbh_it.c
     \brief main interrupt service routines
 
     \version 2019-6-5, V1.0.0, firmware for GD32VF103
@@ -34,9 +34,9 @@ OF SUCH DAMAGE.
 
 #include "drv_usbh_int.h"
 #include "drv_usb_hw.h"
-#include "gd32vf103_it.h"
+#include "gd32vf103_usbh_it.h"
 
-extern usb_core_driver usb_hid_core;
+extern usb_core_driver usbh_drv_core;
 
 extern void usb_timer_irq (void);
 
@@ -48,7 +48,7 @@ extern void usb_timer_irq (void);
 */
 void  USBFS_IRQHandler (void)
 {
-    usbh_isr (&usb_hid_core);
+    usbh_isr (&usbh_drv_core);
 }
 
 /*!
