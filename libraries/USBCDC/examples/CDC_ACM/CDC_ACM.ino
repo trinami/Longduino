@@ -105,7 +105,7 @@ void cdc_acm_data_send (usb_dev *pudev, uint32_t data_len)
     \param[out] none
     \retval     none
 */
-int main(void)
+void setup()
 {
     eclic_global_interrupt_enable();	
 
@@ -122,8 +122,10 @@ int main(void)
     /* check if USB device is enumerated successfully */
     while (USBD_CONFIGURED != USB_OTG_dev.dev.cur_status) {
     }
+}
 
-    while (1) {
+void loop()
+{
         if (USBD_CONFIGURED == USB_OTG_dev.dev.cur_status) {
             if (1 == cdc_acm_packet_receive && 1 == cdc_acm_packet_sent) {
                 cdc_acm_packet_sent = 0;
@@ -137,5 +139,4 @@ int main(void)
                 }
             }
         }
-    }
 }
