@@ -38,6 +38,7 @@ OF SUCH DAMAGE.
 #include <stdlib.h>
 #include <string.h>
 #include "riscv_encoding.h"
+#include "gd32vf103v_eval.h"
 
 
 usb_core_driver USB_OTG_dev = 

@@ -1,5 +1,5 @@
 /*!
-    \file  usbd_conf.h
+    \file  iap_usbd_conf.h
     \brief the header file of USBFS device-mode configuration
 
     \version 2019-6-5, V1.0.0, firmware for GD32VF103
@@ -32,14 +32,8 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 OF SUCH DAMAGE.
 */
 
-#ifndef USBFS_CONF_H
-#define USBFS_CONF_H
-
-#include "usb_conf.h"
-
-#define USBD_CFG_MAX_NUM                   1
-#define USBD_ITF_MAX_NUM                   1
-#define USB_STR_DESC_MAX_SIZE              64
+#ifndef IAP_USBD_CONF_H
+#define IAP_USBD_CONF_H
 
 #define USB_STRING_COUNT                   4
 
@@ -65,4 +59,4 @@ OF SUCH DAMAGE.
 #define IS_PROTECTED_AREA(addr)            (uint8_t)(((addr >= 0x08000000) && \
                                            (addr < (APP_LOADED_ADDR)))? 1 : 0)
 
-#endif /* USBD_CONF_H */
+#endif /* IAP_USBD_CONF_H */

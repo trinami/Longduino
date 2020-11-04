@@ -35,9 +35,14 @@ OF SUCH DAMAGE.
 #ifndef IAP_CORE_H
 #define IAP_CORE_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "usbd_enum.h"
 #include "usb_ch9_std.h"
 #include "usbd_transc.h"
+#include "iap_usbd_conf.h"
 
 #define IAP_CONFIG_DESC_SIZE                9
 #define USB_SERIAL_STRING_SIZE              0x06
@@ -111,5 +116,9 @@ uint8_t iap_data_handler (usb_dev *pudev, uint8_t ep_id);
 
 /* send iap report */
 uint8_t iap_report_send (usb_dev *pudev, uint8_t *report, uint16_t Len);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif  /* IAP_CORE_H */
