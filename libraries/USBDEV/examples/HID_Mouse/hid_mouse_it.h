@@ -1,6 +1,6 @@
 /*!
-    \file  usbd_conf.h
-    \brief the header file of USB device-mode configuration
+    \file  hid_mouse_it.h
+    \brief the header file of the ISR
 
     \version 2019-6-5, V1.0.0, firmware for GD32VF103
 */
@@ -32,23 +32,32 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 OF SUCH DAMAGE.
 */
 
-#ifndef USBD_CONF_H
-#define USBD_CONF_H
+#ifndef GD32VF103_IT_H
+#define GD32VF103_IT_H
 
-#include "usb_conf.h"
+#ifdef __cplusplus
+extern "C" {
+#endif 
 
-#define USBD_CFG_MAX_NUM                    1
-#define USBD_ITF_MAX_NUM                    1
+#include "usbd_core.h"
 
-#define USB_STR_DESC_MAX_SIZE               64
+typedef enum {
+    JOY_NONE = 0,
+    JOY_SEL,
+    JOY_UP,
+    JOY_DOWN,
+    JOY_LEFT,
+    JOY_RIGHT
+} joystate_enum;
 
-#define USB_STRING_COUNT                    4U
+/* function declarations */
+/* this function handles USB wakeup interrupt handler */
+void USBFS_WKUP_IRQHandler(void);
+/* this function handles USBFS IRQ Handler */
+void USBFS_IRQHandler(void);
 
-/* endpoint count used by the HID device */
-#define HID_IN_EP                    EP1_IN
-#define HID_OUT_EP                   EP1_OUT
+#ifdef __cplusplus
+}
+#endif
 
-#define HID_IN_PACKET                8
-#define HID_OUT_PACKET               8
-
-#endif /* USBD_CONF_H */
+#endif /* GD32VF103_IT_H */

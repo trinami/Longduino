@@ -1,5 +1,5 @@
 /*!
-    \file  gd32vf103_it.c
+    \file  hid_mouse_it.c
     \brief main interrupt service routines
 
     \version 2019-6-5, V1.0.0, firmware for GD32VF103
@@ -34,7 +34,7 @@ OF SUCH DAMAGE.
 
 #include "drv_usbd_int.h"
 #include "drv_usb_hw.h"
-#include "gd32vf103_it.h"
+#include "hid_mouse_it.h"
 #include "standard_hid_core.h"
 #include "gd32vf103v_eval.h"
 

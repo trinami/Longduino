@@ -1,12 +1,14 @@
 /*!
-    \file  gd32vf103_it.h
-    \brief the header file of the ISR
+    \file    hid_mouse_systick.h
+    \brief   the header file of systick
 
-    \version 2019-6-5, V1.0.0, firmware for GD32VF103
+      \version 2019-6-5, V1.0.0, firmware for GD32VF103
 */
 
 /*
     Copyright (c) 2019, GigaDevice Semiconductor Inc.
+
+    All rights reserved.
 
     Redistribution and use in source and binary forms, with or without modification, 
 are permitted provided that the following conditions are met:
@@ -32,32 +34,11 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 OF SUCH DAMAGE.
 */
 
-#ifndef GD32VF103_IT_H
-#define GD32VF103_IT_H
+#ifndef SYS_TICK_H
+#define SYS_TICK_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif 
+#include <stdint.h>
 
-#include "usbd_core.h"
+void systick_config(void);
 
-typedef enum {
-    JOY_NONE = 0,
-    JOY_SEL,
-    JOY_UP,
-    JOY_DOWN,
-    JOY_LEFT,
-    JOY_RIGHT
-} joystate_enum;
-
-/* function declarations */
-/* this function handles USB wakeup interrupt handler */
-void USBFS_WKUP_IRQHandler(void);
-/* this function handles USBFS IRQ Handler */
-void USBFS_IRQHandler(void);
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif /* GD32VF103_IT_H */
+#endif /* SYS_TICK_H */

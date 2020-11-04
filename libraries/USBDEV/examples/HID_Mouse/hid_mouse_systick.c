@@ -1,6 +1,6 @@
 /*!
-    \file    systick.h
-    \brief   the header file of systick
+    \file    systick.c
+    \brief   the systick configuration file
 
       \version 2019-6-5, V1.0.0, firmware for GD32VF103
 */
@@ -34,11 +34,14 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 OF SUCH DAMAGE.
 */
 
-#ifndef SYS_TICK_H
-#define SYS_TICK_H
+#include "gd32vf103.h"
+#include "hid_mouse_systick.h"
 
-#include <stdint.h>
-
-void systick_config(void);
-
-#endif /* SYS_TICK_H */
+void systick_config(void)
+{
+	eclic_global_interrupt_enable();
+    *(uint64_t*)(TIMER_CTRL_ADDR + TIMER_MTIMECMP) = TIMER_FREQ / 100;
+    eclic_set_nlbits(ECLIC_GROUP_LEVEL2_PRIO2);
+    eclic_irq_enable(CLIC_INT_TMR, 3, 3);
+    *(uint64_t*)(TIMER_CTRL_ADDR + TIMER_MTIME) = 0;
+}

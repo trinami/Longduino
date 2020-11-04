@@ -37,7 +37,7 @@ OF SUCH DAMAGE.
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "systick.h"
+#include "hid_mouse_systick.h"
 
 usb_core_driver USB_OTG_dev = {
     .dev = {

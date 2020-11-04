@@ -1,14 +1,12 @@
 /*!
-    \file    systick.c
-    \brief   the systick configuration file
+    \file  hid_mouse_usbd_conf.h
+    \brief the header file of USB device-mode configuration
 
-      \version 2019-6-5, V1.0.0, firmware for GD32VF103
+    \version 2019-6-5, V1.0.0, firmware for GD32VF103
 */
 
 /*
     Copyright (c) 2019, GigaDevice Semiconductor Inc.
-
-    All rights reserved.
 
     Redistribution and use in source and binary forms, with or without modification, 
 are permitted provided that the following conditions are met:
@@ -34,14 +32,23 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 OF SUCH DAMAGE.
 */
 
-#include "gd32vf103.h"
-#include "systick.h"
+#ifndef USBD_CONF_H
+#define USBD_CONF_H
 
-void systick_config(void)
-{
-	eclic_global_interrupt_enable();
-    *(uint64_t*)(TIMER_CTRL_ADDR + TIMER_MTIMECMP) = TIMER_FREQ / 100;
-    eclic_set_nlbits(ECLIC_GROUP_LEVEL2_PRIO2);
-    eclic_irq_enable(CLIC_INT_TMR, 3, 3);
-    *(uint64_t*)(TIMER_CTRL_ADDR + TIMER_MTIME) = 0;
-}
+#include "usb_conf.h"
+
+#define USBD_CFG_MAX_NUM                    1
+#define USBD_ITF_MAX_NUM                    1
+
+#define USB_STR_DESC_MAX_SIZE               64
+
+#define USB_STRING_COUNT                    4U
+
+/* endpoint count used by the HID device */
+#define HID_IN_EP                    EP1_IN
+#define HID_OUT_EP                   EP1_OUT
+
+#define HID_IN_PACKET                8
+#define HID_OUT_PACKET               8
+
+#endif /* USBD_CONF_H */
