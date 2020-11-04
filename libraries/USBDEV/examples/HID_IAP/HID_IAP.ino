@@ -64,7 +64,7 @@ void serial_string_create(void);
     \param[out] none
     \retval     none
 */
-int main(void)
+void setup()
 {
     eclic_global_interrupt_enable();
 
@@ -96,9 +96,10 @@ int main(void)
     /* check if USB device is enumerated successfully */
     while (USB_OTG_dev.dev.cur_status != USBD_CONFIGURED) {
     }
+}
 
-    while (1) {
-    }
+void loop()
+{
 }
 
 /*!
