@@ -1,8 +1,8 @@
 /*!
-    \file  app.c
-    \brief USB main routine for Audio device
+    \file  drv_usb_hw.h
+    \brief usb hardware configuration header file
 
-    \version 2019-6-5, V1.0.0, firmware for GD32VF103
+    \version 2019-6-5, V1.0.0, firmware for GD32 USBFS&USBHS
 */
 
 /*
@@ -32,51 +32,39 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 OF SUCH DAMAGE.
 */
 
-#include "gd32vf103_hw.h"
-#include "audio_core.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#ifndef __DRV_USB_HW_H
+#define __DRV_USB_HW_H
 
-usb_core_driver USB_OTG_dev = 
-{
-    .dev = {
-        .desc = {
-            .dev_desc       = (uint8_t *)&device_descripter,
-            .config_desc    = (uint8_t *)&configuration_descriptor,
-            .strings        = usbd_strings,
-        }
-    }
-};
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-/*!
-    \brief      main routine will construct a USB keyboard
-    \param[in]  none
-    \param[out] none
-    \retval     none
-*/
-int main(void)
-{
-	  eclic_global_interrupt_enable();
+#include "usb_conf.h"
 
-    eclic_priority_group_set(ECLIC_PRIGROUP_LEVEL2_PRIO2);
+/* configure USB clock */
+void usb_rcu_config (void);
 
-    /* configure USB clock */
-    usb_rcu_config();
+/* configure USB interrupt */
+void usb_intr_config (void);
 
-    /* timer nvic initialization */
-    usb_timer_init();
+/* initializes delay unit using Timer2 */
+void usb_timer_init (void);
 
-    /* USB device stack configure */
-    usbd_init (&USB_OTG_dev, USB_CORE_ENUM_FS, &usbd_audio_cb);
+/* delay in micro seconds */
+void usb_udelay (const uint32_t usec);
 
-    /* USB interrupt configure */
-    usb_intr_config();
+/* delay in milli seconds */
+void usb_mdelay (const uint32_t msec);
 
-    /* check if USB device is enumerated successfully */
-    while (USB_OTG_dev.dev.cur_status != USBD_CONFIGURED) {
-    }
+#ifdef USE_HOST_MODE
+/* configure USB VBus */
+    void usb_vbus_config (void);
+/* drive usb VBus */
+    void usb_vbus_drive (uint8_t State);
+#endif /* USE_HOST_MODE */
 
-    while (1) {
-    }
+#ifdef __cplusplus
 }
+#endif
+
+#endif /* __DRV_USB_HW_H */

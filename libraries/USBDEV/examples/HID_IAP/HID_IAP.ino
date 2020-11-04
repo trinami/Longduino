@@ -1,6 +1,6 @@
 /*!
     \file  app.c
-    \brief USB main routine for Audio device
+    \brief USB main routine for HID IAP
 
     \version 2019-6-5, V1.0.0, firmware for GD32VF103
 */
@@ -33,10 +33,12 @@ OF SUCH DAMAGE.
 */
 
 #include "gd32vf103_hw.h"
-#include "audio_core.h"
+#include "iap_core.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "riscv_encoding.h"
+
 
 usb_core_driver USB_OTG_dev = 
 {
@@ -49,6 +51,12 @@ usb_core_driver USB_OTG_dev =
     }
 };
 
+pAppFunction application;
+
+extern uint8_t usbd_serial_string[];
+void serial_string_create(void);
+
+
 /*!
     \brief      main routine will construct a USB keyboard
     \param[in]  none
@@ -57,26 +65,55 @@ usb_core_driver USB_OTG_dev =
 */
 int main(void)
 {
-	  eclic_global_interrupt_enable();
+    eclic_global_interrupt_enable();
 
     eclic_priority_group_set(ECLIC_PRIGROUP_LEVEL2_PRIO2);
+
+    /* configure Tamper key to run firmware */
+    gd_eval_key_init(KEY_A, KEY_MODE_GPIO);
+  
+    usb_timer_init();
+
+    /* tamper key must be pressed on GD32350R-EVAL when power on */
+    if (0 == gd_eval_key_state_get(KEY_A)) {
+        /* test if user code is programmed starting from address 0x08010000 */
+        if (0x0001AAB1 == (*(__IO uint32_t*)APP_LOADED_ADDR)) {
+            clear_csr(mstatus, MSTATUS_MIE);
+            asm volatile ("jr %0 " :: "r"(APP_LOADED_ADDR));
+        }
+    }
 
     /* configure USB clock */
     usb_rcu_config();
 
-    /* timer nvic initialization */
-    usb_timer_init();
+    serial_string_create();
 
-    /* USB device stack configure */
-    usbd_init (&USB_OTG_dev, USB_CORE_ENUM_FS, &usbd_audio_cb);
-
-    /* USB interrupt configure */
     usb_intr_config();
+
+    usbd_init (&USB_OTG_dev, USB_CORE_ENUM_FS, &usbd_hid_cb);
 
     /* check if USB device is enumerated successfully */
     while (USB_OTG_dev.dev.cur_status != USBD_CONFIGURED) {
     }
 
     while (1) {
+    }
+}
+
+/*!
+    \brief      create the serial number string descriptor
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/
+void  serial_string_create (void)
+{
+    uint32_t device_serial = *(uint32_t*)DEVICE_ID;
+
+    if (0 != device_serial) {
+        usbd_serial_string[2] = (uint8_t)device_serial;
+        usbd_serial_string[3] = (uint8_t)(device_serial >> 8);
+        usbd_serial_string[4] = (uint8_t)(device_serial >> 16);
+        usbd_serial_string[5] = (uint8_t)(device_serial >> 24);
     }
 }

@@ -33,7 +33,7 @@ OF SUCH DAMAGE.
 */
 
 #include "systick.h"
-#include "drv_usb_hw.h"
+#include "gd32vf103_hw.h"
 #include "cdc_acm_uart.h"
 #include <stdio.h>
 #include <stdlib.h>

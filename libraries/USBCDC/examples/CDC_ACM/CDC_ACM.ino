@@ -33,7 +33,7 @@ OF SUCH DAMAGE.
 */
 
 
-#include "drv_usb_hw.h"
+#include "gd32vf103_hw.h"
 #include "cdc_acm_core.h"
 #include <stdio.h>
 #include <stdlib.h>
