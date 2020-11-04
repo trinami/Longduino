@@ -36,12 +36,11 @@ OF SUCH DAMAGE.
 #include "drv_usb_core.h"
 #include "usbh_usr.h"
 #include "usbh_msc_core.h"
-#include "gd32vf103v_eval.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-usb_core_driver usbh_msc_core;
+usb_core_driver usbh_drv_core;
 
 usbh_host usb_host = {
     .class_cb = &usbh_msc_cb,
@@ -53,7 +52,7 @@ usbh_host usb_host = {
   * @param  None
   * @retval None
   */
-int main(void)
+void setup()
 {
     eclic_global_interrupt_enable();
 
@@ -66,13 +65,13 @@ int main(void)
     /* configure GPIO pin used for switching VBUS power and charge pump I/O */
     usb_vbus_config();
 
-    usbh_init (&usbh_msc_core, USB_CORE_ENUM_FS, &usb_host);
+    usbh_init (&usbh_drv_core, USB_CORE_ENUM_FS, &usb_host);
 
     /* enable interrupts */
     usb_intr_config();
+}
 
-    while (1) {
-        /* Host state handler */
-        usbh_core_task (&usbh_msc_core, &usb_host);
-    }
+void loop() {
+    /* Host state handler */
+    usbh_core_task (&usbh_drv_core, &usb_host);
 }

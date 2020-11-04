@@ -38,7 +38,7 @@ OF SUCH DAMAGE.
 
 static volatile DSTATUS state = STA_NOINIT; /* disk status */
 
-extern usb_core_driver usbh_msc_core;
+extern usb_core_driver usbh_drv_core;
 extern usbh_host usb_host;
 
 /*!
@@ -49,7 +49,7 @@ extern usbh_host usb_host;
 */
 DSTATUS disk_initialize (BYTE drv)
 {
-    if (usbh_msc_core.host.connect_status) {
+    if (usbh_drv_core.host.connect_status) {
         state &= ~STA_NOINIT;
     }
 
@@ -83,7 +83,7 @@ DSTATUS disk_status (BYTE drv)
 DRESULT disk_read (BYTE drv, 
                    BYTE *buff, 
                    DWORD sector, 
-                   BYTE count)
+                   UINT count)
 {
     BYTE status = USBH_MSC_OK;
 
@@ -95,12 +95,12 @@ DRESULT disk_read (BYTE drv,
         return RES_NOTRDY;
     }
 
-    if (usbh_msc_core.host.connect_status) {
+    if (usbh_drv_core.host.connect_status) {
         do {
-            status = usbh_msc_read10 (&usbh_msc_core, buff,sector, 512 * count);
-            usbh_msc_botxfer(&usbh_msc_core, &usb_host);
+            status = usbh_msc_read10 (&usbh_drv_core, buff,sector, 512 * count);
+            usbh_msc_botxfer(&usbh_drv_core, &usb_host);
 
-            if (!usbh_msc_core.host.connect_status) {
+            if (!usbh_drv_core.host.connect_status) {
                 return RES_ERROR;
             }
         } while(status == USBH_MSC_BUSY);
@@ -127,7 +127,7 @@ DRESULT disk_read (BYTE drv,
 DRESULT disk_write (BYTE drv, 
                     const BYTE *buff, 
                     DWORD sector, 
-                    BYTE count)
+                    UINT count)
 {
     BYTE status = USBH_MSC_OK;
 
@@ -143,12 +143,12 @@ DRESULT disk_write (BYTE drv,
         return RES_WRPRT;
     }
 
-    if (usbh_msc_core.host.connect_status) {
+    if (usbh_drv_core.host.connect_status) {
         do {
-            status = usbh_msc_write10 (&usbh_msc_core, (BYTE*)buff,sector, 512 * count);
-            usbh_msc_botxfer(&usbh_msc_core, &usb_host);
+            status = usbh_msc_write10 (&usbh_drv_core, (BYTE*)buff,sector, 512 * count);
+            usbh_msc_botxfer(&usbh_drv_core, &usb_host);
 
-            if (!usbh_msc_core.host.connect_status) {
+            if (!usbh_drv_core.host.connect_status) {
                 return RES_ERROR;
             }
         } while(status == USBH_MSC_BUSY);
