@@ -55,9 +55,9 @@ usb_core_driver USB_OTG_dev =
     \param[out] none
     \retval     none
 */
-int main(void)
+void setup()
 {
-	  eclic_global_interrupt_enable();
+    eclic_global_interrupt_enable();
 
     eclic_priority_group_set(ECLIC_PRIGROUP_LEVEL2_PRIO2);
 
@@ -76,7 +76,8 @@ int main(void)
     /* check if USB device is enumerated successfully */
     while (USB_OTG_dev.dev.cur_status != USBD_CONFIGURED) {
     }
+}
 
-    while (1) {
-    }
+void loop()
+{
 }
