@@ -57,7 +57,7 @@ void key_config(void);
   * @param  None
   * @retval None
   */
-int main(void)
+void setup()
 {
     eclic_global_interrupt_enable();
 
@@ -79,10 +79,10 @@ int main(void)
     /* check if USB device is enumerated successfully */
     while (USBD_CONFIGURED != USB_OTG_dev.dev.cur_status) {
     }
+}
 
-    while (1) 
-    {
-    }
+void loop()
+{
 }
 
 /*!
