@@ -35,8 +35,13 @@ OF SUCH DAMAGE.
 #ifndef __STANDARD_HID_CORE_H
 #define __STANDARD_HID_CORE_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "usbd_enum.h"
 #include "usb_hid.h"
+#include "hid_mouse_usbd_conf.h"
 
 #define USB_HID_CONFIG_DESC_LEN          0x22U
 #define USB_HID_REPORT_DESC_LEN          0x4AU
@@ -52,5 +57,9 @@ extern usb_class_core usbd_hid_cb;
 
 /* send keyboard report */
 uint8_t hid_report_send (usb_dev *pudev, uint8_t *report, uint16_t len);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif  /* __STANDARD_HID_CORE_H */

@@ -32,15 +32,10 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 OF SUCH DAMAGE.
 */
 
-#ifndef USBD_CONF_H
-#define USBD_CONF_H
+#ifndef HID_MOUSE_USBD_CONF_H
+#define HID_MOUSE_USBD_CONF_H
 
 #include "usb_conf.h"
-
-#define USBD_CFG_MAX_NUM                    1
-#define USBD_ITF_MAX_NUM                    1
-
-#define USB_STR_DESC_MAX_SIZE               64
 
 #define USB_STRING_COUNT                    4U
 
@@ -51,4 +46,4 @@ OF SUCH DAMAGE.
 #define HID_IN_PACKET                8
 #define HID_OUT_PACKET               8
 
-#endif /* USBD_CONF_H */
+#endif /*  HID_MOUSE_USBD_CONF_H */

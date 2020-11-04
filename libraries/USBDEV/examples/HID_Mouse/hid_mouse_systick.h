@@ -34,11 +34,19 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 OF SUCH DAMAGE.
 */
 
-#ifndef SYS_TICK_H
-#define SYS_TICK_H
+#ifndef HID_MOUSE_SYS_TICK_H
+#define HID_MOUSE_SYS_TICK_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include <stdint.h>
 
 void systick_config(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* SYS_TICK_H */
