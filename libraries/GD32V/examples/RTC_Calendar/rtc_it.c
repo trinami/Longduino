@@ -1,6 +1,6 @@
 /*!
-    \file  gd32vf103_it.h
-    \brief the header file of the ISR
+    \file  rtc_it.c
+    \brief interrupt service routines
 
     \version 2019-6-5, V1.0.0, firmware for GD32VF103
 */
@@ -32,13 +32,33 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 OF SUCH DAMAGE.
 */
 
-#ifndef GD32VF103_IT_H
-#define GD32VF103_IT_H
+#include "rtc_it.h"
+#include "gd32vf103v_eval.h"
 
-#include "gd32vf103.h"
+extern __IO uint32_t timedisplay;
 
-/* function declarations */
-/* RTC global interrupt function */
-void RTC_IRQHandler(void);
+/*!
+    \brief      this function handles RTC global interrupt request
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/
+void RTC_IRQHandler(void)
+{
+    if (rtc_flag_get(RTC_FLAG_SECOND) != RESET){
+        /* clear the RTC second interrupt flag*/
+        rtc_flag_clear(RTC_FLAG_SECOND);
 
-#endif /* GD32VF103_IT_H */
+        /* enable time update */
+        timedisplay = 1;
+
+        /* wait until last write operation on RTC registers has finished */
+        rtc_lwoff_wait();
+        /* reset RTC counter when time is 23:59:59 */
+        if (rtc_counter_get() == 0x00015180){
+            rtc_counter_set(0x0);
+            /* wait until last write operation on RTC registers has finished */
+            rtc_lwoff_wait();
+        }
+    }
+}

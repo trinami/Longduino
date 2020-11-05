@@ -35,6 +35,10 @@ OF SUCH DAMAGE.
 #ifndef __RTC_H
 #define __RTC_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "gd32vf103.h"
 #include <stdio.h>
 
@@ -44,6 +48,10 @@ void time_adjust(void);
 void time_display(uint32_t timevar);
 void time_show(void);
 uint8_t usart_scanf(uint32_t value);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __RTC_H */
 
