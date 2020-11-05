@@ -1,6 +1,6 @@
 /*!
-    \file    gd32vf103_it.c
-    \brief   interrupt service routines
+    \file    tamper_it.h
+    \brief   the header file of the ISR
 
     \version 2019-6-5, V1.0.0, firmware for GD32VF103
 */
@@ -32,38 +32,21 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 OF SUCH DAMAGE.
 */
 
-#include "gd32vf103_it.h"
-#include "gd32vf103v_eval.h"
+#ifndef GD32VF103_IT_H
+#define GD32VF103_IT_H
 
-extern uint32_t is_backup_register_clear(void);
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-/*!
-    \brief      this function handles SysTick exception
-    \param[in]  none
-    \param[out] none
-    \retval     none
-*/
-void TAMPER_IRQHandler(void)
-{
-    if(RESET != bkp_interrupt_flag_get()){
-        /* a tamper detection event occurred */
-        /* check if backup data registers are cleared */
-        if(0 == is_backup_register_clear()){
-            /* backup data registers are cleared */
-            /* turn on LED3 */
-            gd_eval_led_on(LED3);
-        }else{
-            /* backup data registers are not cleared */
-            /* turn on LED4 */
-            gd_eval_led_on(LED4);
-        }
-        /* clear the interrupt bit flag of tamper interrupt */
-        bkp_interrupt_flag_clear();
-        /* disable the tamper pin */
-        bkp_interrupt_disable();
-        /* enable the tamper pin */
-        bkp_interrupt_enable();
-        /* tamper pin active level set */
-        bkp_tamper_active_level_set(TAMPER_PIN_ACTIVE_LOW);
-    }
+#include "gd32vf103.h"
+
+/* function declarations */
+/* TAMPER handle function */
+void TAMPER_IRQHandler(void);
+
+#ifdef __cplusplus
 }
+#endif
+
+#endif /* GD32VF103_IT_H */

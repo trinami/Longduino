@@ -47,7 +47,7 @@ uint32_t check_backup_register(uint16_t data);
     \param[out] none
     \retval     none
 */
-int main(void)
+void setup()
 {
     /* led configuration and turn on all led */
     led_config();
@@ -85,8 +85,10 @@ int main(void)
         /* turn on LED2 */
         gd_eval_led_on(LED2);
     }
-    while(1){
-    }
+}
+
+void loop()
+{
 }
 
 /*!
@@ -150,6 +152,10 @@ void led_config(void)
     gd_eval_led_init(LED4);
 }
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*!
     \brief      check if the backup data registers are clear or not
     \param[in]  none
@@ -175,3 +181,7 @@ uint32_t is_backup_register_clear(void)
     }
     return 0;
 }
+
+#ifdef __cplusplus
+}
+#endif
