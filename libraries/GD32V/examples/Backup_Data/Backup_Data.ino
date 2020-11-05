@@ -47,7 +47,7 @@ uint32_t check_backup_register(uint16_t data);
     \param[out] none
     \retval     none
 */
-int main(void)
+void setup()
 {
     /* led configuration and turn on all led */
     led_config();
@@ -82,8 +82,10 @@ int main(void)
     }
     /* turn on LED4 */
     gd_eval_led_on(LED4);;
-    while(1){
-    }
+}
+
+void loop()
+{
 }
 
 /*!
