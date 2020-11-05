@@ -40,8 +40,7 @@ OF SUCH DAMAGE.
 #include "lcd_log.h"
 #endif
 #include <string.h>
-
-#define BUTTON_CET 8
+#include "gd32vf103v_eval.h"
 
 #define SMALL_FONT_COLUMN_WIDTH    8
 #define SMALL_FONT_LINE_WIDTH      16
@@ -131,7 +130,7 @@ void usbh_user_init(void)
         startup = 1U;
 
         /* configure the User key */
-	pinMode(BUTTON_CET, INPUT);
+        gd_eval_key_init(KEY_CET, KEY_MODE_GPIO);
 
 #if USE_DISPLAY
         exmc_lcd_init();
@@ -368,7 +367,7 @@ usbh_user_status usbh_user_userinput(void)
     usbh_user_status usbh_usr_status = USBH_USER_NO_RESP;
 
     /*key B3 is in polling mode to detect user action */
-    if (HIGH != digitalRead(BUTTON_CET)) {
+    if (SET != gd_eval_key_state_get(KEY_CET)) {
         usbh_usr_status = USBH_USER_RESP_OK;
     }
 
