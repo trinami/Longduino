@@ -113,6 +113,7 @@ typedef enum
 #define KEYn                             5U
 
 /* wakeup push-button */
+#ifndef KEY_A_PIN
 #define KEY_A_PIN                        GPIO_PIN_0
 #define KEY_A_GPIO_PORT                  GPIOA
 #define KEY_A_GPIO_CLK                   RCU_GPIOA
@@ -120,8 +121,10 @@ typedef enum
 #define KEY_A_EXTI_PORT_SOURCE           GPIO_PORT_SOURCE_GPIOA
 #define KEY_A_EXTI_PIN_SOURCE            GPIO_PIN_SOURCE_0
 #define KEY_A_EXTI_IRQn                  EXTI0_IRQn
+#endif
 
 /* tamper push-button */
+#ifndef KEY_B_PIN
 #define KEY_B_PIN                        GPIO_PIN_13
 #define KEY_B_GPIO_PORT                  GPIOC
 #define KEY_B_GPIO_CLK                   RCU_GPIOC
@@ -129,8 +132,10 @@ typedef enum
 #define KEY_B_EXTI_PORT_SOURCE           GPIO_PORT_SOURCE_GPIOC
 #define KEY_B_EXTI_PIN_SOURCE            GPIO_PIN_SOURCE_13
 #define KEY_B_EXTI_IRQn                  EXTI10_15_IRQn
+#endif
 
 /* user push-button */
+#ifndef KEY_C_PIN
 #define KEY_C_PIN                        GPIO_PIN_14
 #define KEY_C_GPIO_PORT                  GPIOB
 #define KEY_C_GPIO_CLK                   RCU_GPIOB
@@ -138,7 +143,9 @@ typedef enum
 #define KEY_C_EXTI_PORT_SOURCE           GPIO_PORT_SOURCE_GPIOB
 #define KEY_C_EXTI_PIN_SOURCE            GPIO_PIN_SOURCE_14
 #define KEY_C_EXTI_IRQn                  EXTI10_15_IRQn
+#endif
 
+#ifndef KEY_D_PIN
 #define KEY_D_PIN                        GPIO_PIN_5
 #define KEY_D_GPIO_PORT                  GPIOC
 #define KEY_D_GPIO_CLK                   RCU_GPIOC
@@ -146,7 +153,9 @@ typedef enum
 #define KEY_D_EXTI_PORT_SOURCE           GPIO_PORT_SOURCE_GPIOC
 #define KEY_D_EXTI_PIN_SOURCE            GPIO_PIN_SOURCE_5
 #define KEY_D_EXTI_IRQn                  EXTI5_9_IRQn
+#endif
 
+#ifndef KEY_CET_PIN
 #define KEY_CET_PIN                      GPIO_PIN_4
 #define KEY_CET_GPIO_PORT                GPIOC
 #define KEY_CET_GPIO_CLK                 RCU_GPIOC
@@ -154,6 +163,7 @@ typedef enum
 #define KEY_CET_EXTI_PORT_SOURCE         GPIO_PORT_SOURCE_GPIOC
 #define KEY_CET_EXTI_PIN_SOURCE          GPIO_PIN_SOURCE_4
 #define KEY_CET_EXTI_IRQn                EXTI4_IRQn
+#endif
 
 /* function declarations */
 /* configure led GPIO */
