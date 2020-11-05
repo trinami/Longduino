@@ -10,6 +10,18 @@
 /* LEDs */
 #define LED_BUILTIN  PC0
 
+#define LED1_PIN                         GPIO_PIN_0
+#define LED1_GPIO_PORT                   GPIOC
+#define LED1_GPIO_CLK                    RCU_GPIOC
+
+#define LED2_PIN                         GPIO_PIN_2
+#define LED2_GPIO_PORT                   GPIOC
+#define LED2_GPIO_CLK                    RCU_GPIOC
+
+#define LED3_PIN                         GPIO_PIN_0
+#define LED3_GPIO_PORT                   GPIOE
+#define LED3_GPIO_CLK                    RCU_GPIOE
+
 #ifdef __cplusplus
 extern "C" {
 #endif

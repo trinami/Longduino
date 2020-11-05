@@ -13,6 +13,18 @@
 #define LED_GREEN    PA1
 #define LED_BLUE     PA2
 
+#define LED1_PIN                         GPIO_PIN_13
+#define LED1_GPIO_PORT                   GPIOC
+#define LED1_GPIO_CLK                    RCU_GPIOC
+
+#define LED2_PIN                         GPIO_PIN_1
+#define LED2_GPIO_PORT                   GPIOA
+#define LED2_GPIO_CLK                    RCU_GPIOA
+
+#define LED3_PIN                         GPIO_PIN_2
+#define LED3_GPIO_PORT                   GPIOA
+#define LED3_GPIO_CLK                    RCU_GPIOA
+
 /* SD card chip select */
 #define SDCARD_SS_PIN PB12
 /* LCD chip select */

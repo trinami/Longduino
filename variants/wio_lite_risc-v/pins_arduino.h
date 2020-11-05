@@ -10,6 +10,10 @@
 /* LEDs */
 #define LED_BUILTIN  PA8
 
+#define LED1_PIN                         GPIO_PIN_8
+#define LED1_GPIO_PORT                   GPIOA
+#define LED1_GPIO_CLK                    RCU_GPIOA
+
 
 /* SD card chip select */
 #define SDCARD_SS_PIN PB1

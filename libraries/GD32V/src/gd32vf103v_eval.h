@@ -35,6 +35,8 @@ OF SUCH DAMAGE.
 #ifndef GD32VF103V_EVAL_H
 #define GD32VF103V_EVAL_H
 
+#include "pins_arduino.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -68,21 +70,29 @@ typedef enum
 /* eval board low layer led */
 #define LEDn                             4U
 
+#ifndef LED1_PIN
 #define LED1_PIN                         GPIO_PIN_0
 #define LED1_GPIO_PORT                   GPIOC
 #define LED1_GPIO_CLK                    RCU_GPIOC
+#endif
 
+#ifndef LED2_PIN
 #define LED2_PIN                         GPIO_PIN_2
 #define LED2_GPIO_PORT                   GPIOC
 #define LED2_GPIO_CLK                    RCU_GPIOC
-  
+#endif
+
+#ifndef LED3_PIN
 #define LED3_PIN                         GPIO_PIN_0
 #define LED3_GPIO_PORT                   GPIOE
 #define LED3_GPIO_CLK                    RCU_GPIOE
-  
+#endif
+
+#ifndef LED4_PIN
 #define LED4_PIN                         GPIO_PIN_1
 #define LED4_GPIO_PORT                   GPIOE
 #define LED4_GPIO_CLK                    RCU_GPIOE
+#endif
 
 #define COMn                             2U
 
