@@ -45,7 +45,7 @@ uint32_t val = 0, valcrc = 0;
     \param[out] none
     \retval     none
 */
-int main(void)
+void setup()
 {
     val = (uint32_t)0xabcd1234;
 
@@ -64,8 +64,8 @@ int main(void)
         gd_eval_led_on(LED2);
         gd_eval_led_on(LED3);
     }
-
-    while (1){
-    }
 }
 
+void loop()
+{
+}
