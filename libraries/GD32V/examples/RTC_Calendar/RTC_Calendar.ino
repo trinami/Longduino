@@ -45,7 +45,7 @@ OF SUCH DAMAGE.
     \param[out] none
     \retval     none
 */
-int main(void)
+void setup()
 {
     /* COM0 configure */
     gd_eval_com_init(EVAL_COM0);
@@ -115,9 +115,10 @@ int main(void)
 
     /* display time in infinite loop */
     time_show();
+}
 
-    while (1){
-    }
+void loop()
+{
 }
 
 /*!
