@@ -58,7 +58,7 @@ void  USBFS_IRQHandler (void)
     \param[out] none
     \retval     none
 */
-void EXTI0_IRQHandler(void)
+KEY_A_EXTI_HANDLER
 {
 
 }

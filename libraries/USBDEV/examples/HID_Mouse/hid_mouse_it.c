@@ -83,7 +83,7 @@ void  USBFS_IRQHandler (void)
     \param[out] none
     \retval     none
 */
-void EXTI4_IRQHandler(void)
+KEY_CET_EXTI_HANDLER
 {
     if (exti_interrupt_flag_get(KEY_CET_EXTI_LINE) != RESET) {
         if (USB_OTG_dev.dev.pm.dev_remote_wakeup) {

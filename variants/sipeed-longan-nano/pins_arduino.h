@@ -25,23 +25,26 @@
 #define LED3_GPIO_PORT                   GPIOA
 #define LED3_GPIO_CLK                    RCU_GPIOA
 
+/* Buttons */
 #define BUTTON_BUILTIN PA8
 
 #define KEY_CET_PIN                      GPIO_PIN_8
 #define KEY_CET_GPIO_PORT                GPIOA
 #define KEY_CET_GPIO_CLK                 RCU_GPIOA
-#define KEY_CET_EXTI_LINE                EXTI_4
+#define KEY_CET_EXTI_LINE                EXTI_8
 #define KEY_CET_EXTI_PORT_SOURCE         GPIO_PORT_SOURCE_GPIOA
 #define KEY_CET_EXTI_PIN_SOURCE          GPIO_PIN_SOURCE_8
-#define KEY_CET_EXTI_IRQn                EXTI4_IRQn
+#define KEY_CET_EXTI_IRQn                EXTI5_9_IRQn
+#define KEY_CET_EXTI_HANDLER             void EXTI5_9_IRQHandler(void)
 
 #define KEY_A_PIN                        GPIO_PIN_3
 #define KEY_A_GPIO_PORT                  GPIOB
 #define KEY_A_GPIO_CLK                   RCU_GPIOB
-#define KEY_A_EXTI_LINE                  EXTI_0
+#define KEY_A_EXTI_LINE                  EXTI_3
 #define KEY_A_EXTI_PORT_SOURCE           GPIO_PORT_SOURCE_GPIOB
 #define KEY_A_EXTI_PIN_SOURCE            GPIO_PIN_SOURCE_3
-#define KEY_A_EXTI_IRQn                  EXTI0_IRQn
+#define KEY_A_EXTI_IRQn                  EXTI3_IRQn
+#define KEY_A_EXTI_HANDLER               void EXTI3_IRQHandler(void)
 
 #define KEY_B_PIN                        GPIO_PIN_13
 #define KEY_B_GPIO_PORT                  GPIOA
@@ -50,6 +53,7 @@
 #define KEY_B_EXTI_PORT_SOURCE           GPIO_PORT_SOURCE_GPIOA
 #define KEY_B_EXTI_PIN_SOURCE            GPIO_PIN_SOURCE_13
 #define KEY_B_EXTI_IRQn                  EXTI10_15_IRQn
+#define KEY_B_EXTI_HANDLER               void EXTI10_15_IRQHandler(void)
 
 #define KEY_C_PIN                        GPIO_PIN_14
 #define KEY_C_GPIO_PORT                  GPIOA
@@ -58,15 +62,16 @@
 #define KEY_C_EXTI_PORT_SOURCE           GPIO_PORT_SOURCE_GPIOA
 #define KEY_C_EXTI_PIN_SOURCE            GPIO_PIN_SOURCE_14
 #define KEY_C_EXTI_IRQn                  EXTI10_15_IRQn
+#define KEY_C_EXTI_HANDLER               void EXTI10_15_IRQHandler(void)
 
 #define KEY_D_PIN                        GPIO_PIN_15
 #define KEY_D_GPIO_PORT                  GPIOA
 #define KEY_D_GPIO_CLK                   RCU_GPIOA
-#define KEY_D_EXTI_LINE                  EXTI_5
+#define KEY_D_EXTI_LINE                  EXTI_15
 #define KEY_D_EXTI_PORT_SOURCE           GPIO_PORT_SOURCE_GPIOA
 #define KEY_D_EXTI_PIN_SOURCE            GPIO_PIN_SOURCE_15
-#define KEY_D_EXTI_IRQn                  EXTI5_9_IRQn
-
+#define KEY_D_EXTI_IRQn                  EXTI10_15_IRQn
+#define KEY_D_EXTI_HANDLER               void EXTI10_15_IRQHandler(void)
 
 /* SD card chip select */
 #define SDCARD_SS_PIN PB12
