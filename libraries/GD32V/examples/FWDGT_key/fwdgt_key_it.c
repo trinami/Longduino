@@ -1,5 +1,5 @@
 /*!
-    \file  gd32vf103_it.c
+    \file  fwdgt_key_it.c
     \brief interrupt service routines
 
     \version 2019-6-5, V1.0.0, firmware for GD32VF103
@@ -32,7 +32,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 OF SUCH DAMAGE.
 */
 
-#include "gd32vf103_it.h"
+#include "fwdgt_key_it.h"
 #include "gd32vf103v_eval.h"
 
 
@@ -42,14 +42,14 @@ OF SUCH DAMAGE.
     \param[out] none
     \retval     none
 */
-void EXTI10_15_IRQHandler(void)
+KEY_B_EXTI_HANDLER
 {
     /* make sure whether the EXTI Line is interrupted */
-    if(RESET != exti_interrupt_flag_get(EXTI_13)){
+    if(RESET != exti_interrupt_flag_get(KEY_B_EXTI_LINE)){
         /* reload FWDGT counter */
         fwdgt_counter_reload();
     }
 
     /* clear the interrupt flag bit */
-    exti_interrupt_flag_clear(EXTI_13);
+    exti_interrupt_flag_clear(KEY_B_EXTI_LINE);
 }

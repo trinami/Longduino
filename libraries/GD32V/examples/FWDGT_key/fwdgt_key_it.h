@@ -1,5 +1,5 @@
 /*!
-    \file  gd32vf103_it.h
+    \file  fwdgt_key_it.h
     \brief the header file of the ISR
 
     \version 2019-6-5, V1.0.0, firmware for GD32VF103
@@ -39,6 +39,6 @@ OF SUCH DAMAGE.
 
 /* function declarations */
 /* external lines 10 to 15 interrupt handle function */
-void EXTI10_15_IRQHandler(void);
+KEY_B_EXTI_HANDLER;
 
 #endif /* GD32VF103_IT_H */

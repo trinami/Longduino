@@ -44,7 +44,7 @@ OF SUCH DAMAGE.
     \param[out] none
     \retval     none
 */
-int main(void)
+void setup()
 {
     /* enable IRC40K */
     rcu_osci_on(RCU_IRC40K);
@@ -79,8 +79,10 @@ int main(void)
         /* turn on LED2 */
         gd_eval_led_on(LED2);
     }
-    while(1){
-    }
+}
+
+void loop()
+{
 }
 
 /*!
