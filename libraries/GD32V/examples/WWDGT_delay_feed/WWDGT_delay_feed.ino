@@ -42,7 +42,7 @@ OF SUCH DAMAGE.
     \param[out] none
     \retval     none
 */
-int main(void)
+void setup()
 {
     /* configure systick */
     //systick_config();
@@ -78,13 +78,14 @@ int main(void)
      */
     wwdgt_config(127, 80, WWDGT_CFG_PSC_DIV8);
     wwdgt_enable();
+}
 
-    while(1){
+void loop()
+{
         /* toggle LED3 */
         gd_eval_led_toggle(LED3);
         /* insert 30 ms delay */
         delay_1ms(30);
         /* update WWDGT counter */
         wwdgt_counter_update(127);
-    }
 }
