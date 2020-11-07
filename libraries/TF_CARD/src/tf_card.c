@@ -1,7 +1,7 @@
 #include "tf_card.h"
 
-#define FCLK_SLOW() { SPI_CTL0(SPI1) = (SPI_CTL0(SPI1) & ~0x38) | 0x28; }	/* Set SCLK = PCLK2 / 64 */
-#define FCLK_FAST() { SPI_CTL0(SPI1) = (SPI_CTL0(SPI1) & ~0x38) | 0x00; }	/* Set SCLK = PCLK2 / 2 */
+#define FCLK_SLOW() { SPI_CTL0(SPI1) = (SPI_CTL0(SPI1) & ~0x38) | SPI_PSC_64; }	/* Set SCLK = PCLK2 / 64 */
+#define FCLK_FAST() { SPI_CTL0(SPI1) = (SPI_CTL0(SPI1) & ~0x38) | SPI_PSC_4; }	/* Set SCLK = PCLK2 / 4 */
 
 // #define FCLK_SLOW()
 // #define FCLK_FAST()
