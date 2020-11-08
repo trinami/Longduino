@@ -18,6 +18,10 @@
 /* SD card chip select */
 #define SDCARD_SS_PIN PB1
 
+#define SD_CS_GPIO_PIN                    GPIO_PIN_1
+#define SD_CS_GPIO_PORT                   GPIOB
+#define SD_CS_GPIO_CLK                    RCU_GPIOB
+
 #ifdef __cplusplus
 extern "C" {
 #endif

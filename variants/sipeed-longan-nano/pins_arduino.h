@@ -75,6 +75,11 @@
 
 /* SD card chip select */
 #define SDCARD_SS_PIN PB12
+
+#define SD_CS_GPIO_PIN                    GPIO_PIN_12
+#define SD_CS_GPIO_PORT                   GPIOB
+#define SD_CS_GPIO_CLK                    RCU_GPIOB
+
 /* LCD chip select */
 #define LCD_SS_PIN    PB2
 

@@ -1,4 +1,11 @@
+#include "pins_arduino.h"
 #include "tf_card.h"
+
+#ifndef SD_CS_GPIO_PIN
+#define SD_CS_GPIO_PIN                    GPIO_PIN_12
+#define SD_CS_GPIO_PORT                   GPIOB
+#define SD_CS_GPIO_CLK                    RCU_GPIOB
+#endif
 
 #define FCLK_SLOW() { SPI_CTL0(SPI1) = (SPI_CTL0(SPI1) & ~0x38) | SPI_PSC_64; }	/* Set SCLK = PCLK2 / 64 */
 #define FCLK_FAST() { SPI_CTL0(SPI1) = (SPI_CTL0(SPI1) & ~0x38) | SPI_PSC_4; }	/* Set SCLK = PCLK2 / 4 */
@@ -6,8 +13,8 @@
 // #define FCLK_SLOW()
 // #define FCLK_FAST()
 
-#define CS_HIGH() PB_OUT(12,1)
-#define CS_LOW() PB_OUT(12,0)
+#define CS_HIGH() gpio_bit_set(SD_CS_GPIO_PORT, SD_CS_GPIO_PIN)
+#define CS_LOW() gpio_bit_reset(SD_CS_GPIO_PORT, SD_CS_GPIO_PIN)
 
 /*--------------------------------------------------------------------------
 
@@ -59,14 +66,16 @@ void init_spi(void)
 {
     spi_parameter_struct spi_init_struct;
 
-    rcu_periph_clock_enable(RCU_GPIOB);
     rcu_periph_clock_enable(RCU_SPI1);
 
     /* SPI1_SCK(PB13), SPI1_MISO(PB14) and SPI1_MOSI(PB15) GPIO pin configuration */
+    rcu_periph_clock_enable(RCU_GPIOB);
     gpio_init(GPIOB, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_13 | GPIO_PIN_15);
     gpio_init(GPIOB, GPIO_MODE_IN_FLOATING, GPIO_OSPEED_50MHZ, GPIO_PIN_14);
-    /* SPI1_CS(PB12) GPIO pin configuration */
-    gpio_init(GPIOB, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_12);
+
+    /* SD_CS(PB12) GPIO pin configuration (PB1 on Wio Lite Risc-V) */
+    rcu_periph_clock_enable(SD_CS_GPIO_CLK);
+    gpio_init( SD_CS_GPIO_PORT, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, SD_CS_GPIO_PIN);
 
     /* chip _select invalid*/
     CS_HIGH();
