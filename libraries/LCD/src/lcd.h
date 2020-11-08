@@ -116,6 +116,7 @@ void LCD_ShowStr(u16 x,u16 y,const u8 *p,u16 color, u8 mode);
 u32 mypow(u8 m,u8 n);
 void LCD_ShowNum(u16 x,u16 y,u16 num,u8 len,u16 color);
 void LCD_ShowNum1(u16 x,u16 y,float num,u8 len,u16 color);
+void LCD_WritePicture(u16 x1,u16 y1,u16 x2,u16 y2, unsigned char* img);
 void LCD_ShowPicture(u16 x1,u16 y1,u16 x2,u16 y2);
 void LCD_ShowLogo(void);
 void LCD_SetRotation(u8 rotation);

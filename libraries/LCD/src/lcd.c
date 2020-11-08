@@ -832,19 +832,32 @@ void LCD_ShowNum1(u16 x,u16 y,float num,u8 len,u16 color)
 
 
 /******************************************************************************
+	   Function description: display 16bit (RGB565) picture buffer
+       Entry data: x1, y2 starting point coordinates
+                   x2, y2 terminating coordinates
+       Return value: None
+******************************************************************************/
+void LCD_WritePicture(u16 x1,u16 y1,u16 x2,u16 y2, unsigned char* img)
+{
+	int i;
+	u16 w = x2-x1+1;
+	u16 h = y2-y1+1;
+	int s = w*h*2;
+	LCD_Address_Set(x1,y1,x2,y2);
+	for(i=0;i<s;i++)
+	{ 	
+		LCD_WR_DATA8(img[i]);
+	}			
+}
+
+/******************************************************************************
 	   Function description: display 160x40 16bit (RGB565) picture
        Entry data: x, y starting point coordinates
        Return value: None
 ******************************************************************************/
 void LCD_ShowPicture(u16 x1,u16 y1,u16 x2,u16 y2)
 {
-	int i;
-	LCD_Address_Set(x1,y1,x2,y2);
-	for(i=0;i<12800;i++)
-	{ 	
-		// LCD_WR_DATA8(image[i*2+1]);
-		LCD_WR_DATA8(image[i]);
-	}			
+	LCD_WritePicture(x1,y1,x2,y2,&image);
 }
 
 void LCD_ShowLogo(void)
