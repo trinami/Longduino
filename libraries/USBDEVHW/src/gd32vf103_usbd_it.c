@@ -1,6 +1,6 @@
 /*!
-    \file  gd32vf103_it.h
-    \brief the header file of the ISR
+    \file  gd32vf103_usbd_it.c
+    \brief main interrupt service routines
 
     \version 2019-6-5, V1.0.0, demo for GD32VF103
 */
@@ -32,23 +32,54 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 OF SUCH DAMAGE.
 */
 
-#ifndef GD32VF103_IT_H
-#define GD32VF103_IT_H
+#include "drv_usbd_int.h"
+#include "drv_usb_hw.h"
+#include "gd32vf103_usbd_it.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif 
+extern usb_core_driver USB_OTG_dev;
+extern uint32_t usbfs_prescaler;
 
-#include "usbd_core.h"
+extern void usb_timer_irq(void);
 
-/* function declarations */
-/* this function handles USB wakeup interrupt handler */
-void USBFS_WKUP_IRQHandler(void);
-/* this function handles USBFS IRQ Handler */
-void USBFS_IRQHandler(void);
-
-#ifdef __cplusplus
+/*!
+    \brief      this function handles USBD interrupt
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/
+void USBFS_IRQHandler(void)
+{
+    usbd_isr (&USB_OTG_dev);
 }
-#endif
 
-#endif /* GD32VF103_IT_H */
+/*!
+    \brief      this function handles USBD wakeup interrupt request.
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/
+void USBFS_WKUP_IRQHandler(void)
+{
+    if (USB_OTG_dev.bp.low_power) {
+        SystemInit();
+
+        rcu_usb_clock_config(usbfs_prescaler);
+
+        rcu_periph_clock_enable(RCU_USBFS);
+
+        usb_clock_active(&USB_OTG_dev);
+    }
+
+    exti_interrupt_flag_clear(EXTI_18);
+}
+
+/*!
+    \brief      this function handles Timer0 updata interrupt request.
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/
+void TIMER2_IRQHandler(void)
+{
+    usb_timer_irq();
+}

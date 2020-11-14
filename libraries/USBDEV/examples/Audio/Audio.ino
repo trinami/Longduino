@@ -32,7 +32,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 OF SUCH DAMAGE.
 */
 
-#include "gd32vf103_hw.h"
+#include "gd32vf103_usbd_hw.h"
 #include "audio_core.h"
 #include <stdio.h>
 #include <stdlib.h>

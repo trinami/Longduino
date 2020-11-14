@@ -1,5 +1,5 @@
 /*!
-    \file  gd32vf103_hw.c
+    \file  gd32vf103_usbd_hw.c
     \brief USB hardware configuration for GD32VF103
 
     \version 2019-6-5, V1.0.0, demo for GD32VF103
