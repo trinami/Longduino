@@ -121,7 +121,6 @@ typedef enum
 #define KEY_A_EXTI_PORT_SOURCE           GPIO_PORT_SOURCE_GPIOA
 #define KEY_A_EXTI_PIN_SOURCE            GPIO_PIN_SOURCE_0
 #define KEY_A_EXTI_IRQn                  EXTI0_IRQn
-#define KEY_A_EXTI_HANDLER               void EXTI0_IRQHandler(void)
 #endif
 
 /* tamper push-button */
@@ -133,7 +132,6 @@ typedef enum
 #define KEY_B_EXTI_PORT_SOURCE           GPIO_PORT_SOURCE_GPIOC
 #define KEY_B_EXTI_PIN_SOURCE            GPIO_PIN_SOURCE_13
 #define KEY_B_EXTI_IRQn                  EXTI10_15_IRQn
-#define KEY_B_EXTI_HANDLER               void EXTI10_15_IRQHandler(void)
 #endif
 
 /* user push-button */
@@ -145,7 +143,6 @@ typedef enum
 #define KEY_C_EXTI_PORT_SOURCE           GPIO_PORT_SOURCE_GPIOB
 #define KEY_C_EXTI_PIN_SOURCE            GPIO_PIN_SOURCE_14
 #define KEY_C_EXTI_IRQn                  EXTI10_15_IRQn
-#define KEY_C_EXTI_HANDLER               void EXTI10_15_IRQHandler(void)
 #endif
 
 #ifndef KEY_D_PIN
@@ -156,7 +153,6 @@ typedef enum
 #define KEY_D_EXTI_PORT_SOURCE           GPIO_PORT_SOURCE_GPIOC
 #define KEY_D_EXTI_PIN_SOURCE            GPIO_PIN_SOURCE_5
 #define KEY_D_EXTI_IRQn                  EXTI5_9_IRQn
-#define KEY_D_EXTI_HANDLER               void EXTI5_9_IRQHandler(void)
 #endif
 
 #ifndef KEY_CET_PIN
@@ -167,7 +163,6 @@ typedef enum
 #define KEY_CET_EXTI_PORT_SOURCE         GPIO_PORT_SOURCE_GPIOC
 #define KEY_CET_EXTI_PIN_SOURCE          GPIO_PIN_SOURCE_4
 #define KEY_CET_EXTI_IRQn                EXTI4_IRQn
-#define KEY_CET_EXTI_HANDLER             void EXTI4_IRQHandler(void)
 #endif
 
 /* function declarations */
@@ -181,10 +176,17 @@ void gd_eval_led_off(led_typedef_enum lednum);
 void gd_eval_led_toggle(led_typedef_enum lednum);
 /* configure key */
 void gd_eval_key_init(key_typedef_enum key_num, keymode_typedef_enum key_mode);
+void gd_eval_key_exti_init(key_typedef_enum key_num, voidFuncPtr callback);
 /* return the selected key state */
 uint8_t gd_eval_key_state_get(key_typedef_enum key);
 /* configure COM port */
 void gd_eval_com_init(uint32_t com);
+
+extern void KEY_A_IRQHandler(void);
+extern void KEY_B_IRQHandler(void);
+extern void KEY_C_IRQHandler(void);
+extern void KEY_D_IRQHandler(void);
+extern void KEY_CET_IRQHandler(void);
 
 #ifdef __cplusplus
 }

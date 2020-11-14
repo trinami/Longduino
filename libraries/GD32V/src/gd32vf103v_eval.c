@@ -34,6 +34,8 @@ OF SUCH DAMAGE.
 
 #include "gd32vf103v_eval.h"
 
+#define digitalPinFromSource(p,n) ((p << 4) | n)
+
 /* private variables */
 static uint32_t GPIO_PORT[LEDn] = {LED1_GPIO_PORT, LED2_GPIO_PORT,
                                    LED3_GPIO_PORT, LED4_GPIO_PORT};
@@ -186,6 +188,13 @@ void gd_eval_key_init(key_typedef_enum key_num, keymode_typedef_enum key_mode)
         exti_init(KEY_EXTI_LINE[key_num], EXTI_INTERRUPT, EXTI_TRIG_FALLING);
         exti_interrupt_flag_clear(KEY_EXTI_LINE[key_num]);
     }
+}
+
+void gd_eval_key_exti_init(key_typedef_enum key_num, voidFuncPtr callback)
+{
+     pin_size_t pinId = digitalPinFromSource(KEY_PORT_SOURCE[key_num], KEY_PIN_SOURCE[key_num]);
+     pinMode(pinId, INPUT);
+     attachInterrupt(pinId, callback, FALLING);
 }
 
 /*!
