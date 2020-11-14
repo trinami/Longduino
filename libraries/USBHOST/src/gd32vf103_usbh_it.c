@@ -46,7 +46,7 @@ extern void usb_timer_irq (void);
     \param[out] none
     \retval     none
 */
-void  USBFS_IRQHandler (void)
+void USBFS_IRQHandler(void)
 {
     usbh_isr (&usbh_drv_core);
 }
