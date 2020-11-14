@@ -1,5 +1,5 @@
 /*!
-    \file  gd32vf103_usb_hw.c
+    \file  gd32vf103_usbh_hw.c
     \brief this file implements the board support package for the USB host library
 
     \version 2019-6-5, V1.0.0, firmware for GD32VF103
