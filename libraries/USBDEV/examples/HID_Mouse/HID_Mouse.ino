@@ -98,6 +98,6 @@ void key_config(void)
     gd_eval_key_init(KEY_C, KEY_MODE_GPIO);
     gd_eval_key_init(KEY_D, KEY_MODE_GPIO);
 
-    gd_eval_key_init(KEY_CET, KEY_MODE_EXTI);
+    gd_eval_key_exti_init(KEY_CET, KEY_CET_IRQHandler);
     eclic_irq_enable(KEY_CET_EXTI_IRQn, 2, 0);
 }

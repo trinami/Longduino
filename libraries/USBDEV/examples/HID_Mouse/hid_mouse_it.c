@@ -83,9 +83,8 @@ void  USBFS_IRQHandler (void)
     \param[out] none
     \retval     none
 */
-KEY_CET_EXTI_HANDLER
+void KEY_CET_IRQHandler()
 {
-    if (exti_interrupt_flag_get(KEY_CET_EXTI_LINE) != RESET) {
         if (USB_OTG_dev.dev.pm.dev_remote_wakeup) {
             SystemInit();
 
@@ -105,10 +104,6 @@ KEY_CET_EXTI_HANDLER
 
             USB_OTG_dev.dev.pm.dev_remote_wakeup = 0U;
         }
-
-        /* clear the exti line pending bit */
-        exti_interrupt_flag_clear(KEY_CET_EXTI_LINE);
-    }
 }
 
 /*!
