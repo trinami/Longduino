@@ -53,17 +53,6 @@ void USBFS_IRQHandler(void)
 }
 
 /*!
-    \brief      this function handles EXTI0_IRQ Handler
-    \param[in]  none
-    \param[out] none
-    \retval     none
-*/
-void KEY_A_IRQHandler()
-{
-
-}
-
-/*!
     \brief      this function handles USBD wakeup interrupt request.
     \param[in]  none
     \param[out] none
