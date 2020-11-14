@@ -22,6 +22,9 @@
 #define LED3_GPIO_PORT                   GPIOE
 #define LED3_GPIO_CLK                    RCU_GPIOE
 
+/* Buttons */
+#define BUTTON_BUILTIN PC4
+
 #ifdef __cplusplus
 extern "C" {
 #endif
