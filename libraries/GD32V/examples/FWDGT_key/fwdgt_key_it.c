@@ -42,14 +42,8 @@ OF SUCH DAMAGE.
     \param[out] none
     \retval     none
 */
-KEY_B_EXTI_HANDLER
+void KEY_B_IRQHandler()
 {
-    /* make sure whether the EXTI Line is interrupted */
-    if(RESET != exti_interrupt_flag_get(KEY_B_EXTI_LINE)){
         /* reload FWDGT counter */
         fwdgt_counter_reload();
-    }
-
-    /* clear the interrupt flag bit */
-    exti_interrupt_flag_clear(KEY_B_EXTI_LINE);
 }

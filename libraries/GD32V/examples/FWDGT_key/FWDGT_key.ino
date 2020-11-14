@@ -59,7 +59,7 @@ void setup()
     gd_eval_led_init(LED3);
     
     /* configure the Tamper key which is used to reload FWDGT  */
-    gd_eval_key_init(KEY_B, KEY_MODE_EXTI);
+    gd_eval_key_exti_init(KEY_B, KEY_B_IRQHandler);
     delay_1ms(500);
     /* confiure FWDGT counter clock: 40KHz(IRC40K) / 64 = 0.625 KHz */
     fwdgt_config(2*500, FWDGT_PSC_DIV64);  

@@ -39,6 +39,6 @@ OF SUCH DAMAGE.
 
 /* function declarations */
 /* external lines 10 to 15 interrupt handle function */
-KEY_B_EXTI_HANDLER;
+void KEY_B_IRQHandler();
 
 #endif /* GD32VF103_IT_H */
