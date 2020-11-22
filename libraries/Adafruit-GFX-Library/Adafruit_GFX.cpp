@@ -56,10 +56,12 @@ POSSIBILITY OF SUCH DAMAGE.
 // Pointers are a peculiar case...typically 16-bit on AVR boards,
 // 32 bits elsewhere.  Try to accommodate both...
 
+#ifndef pgm_read_pointer
 #if !defined(__INT_MAX__) || (__INT_MAX__ > 0xFFFF)
  #define pgm_read_pointer(addr) ((void *)pgm_read_dword(addr))
 #else
  #define pgm_read_pointer(addr) ((void *)pgm_read_word(addr))
+#endif
 #endif
 
 #ifndef min
