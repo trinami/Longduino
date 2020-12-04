@@ -250,70 +250,6 @@ BYTE send_cmd (		/* Return value: R1 resp (bit7==1:Failed to send) */
 	return res;							/* Return received response */
 }
 
-static
-void init_timer2(void)
-{
-    timer_parameter_struct timer_initpara;
-
-    rcu_periph_clock_enable(RCU_TIMER2);
-    timer_deinit(TIMER2);
-    /* ((1+TIM_Prescaler )/时钟)*(1+TIM_Period ) 
-        (108000/108000000)*(1000)=1ms
-    */
-    timer_initpara.period = (1000 - 1);
-    timer_initpara.prescaler         = (108 - 1);
-    timer_initpara.alignedmode       = TIMER_COUNTER_EDGE;
-    timer_initpara.counterdirection  = TIMER_COUNTER_UP;
-    timer_initpara.clockdivision     = TIMER_CKDIV_DIV1;
-    timer_initpara.repetitioncounter = 0;
-    timer_init(TIMER2, &timer_initpara);
-
-    timer_update_event_enable(TIMER2);
-    timer_interrupt_enable(TIMER2,TIMER_INT_UP);
-    timer_flag_clear(TIMER2, TIMER_FLAG_UP);
-    timer_update_source_config(TIMER2, TIMER_UPDATE_SRC_GLOBAL);
-
-    /* TIMER2 counter enable */
-    timer_enable(TIMER2);
-}
-
-/*!
-    \brief      time base IRQ
-    \param[in]  none
-    \param[out] none
-    \retval     none
-*/
-/*
-static
-void tfcard_timer_irq (void)
-{
-    if (RESET != timer_flag_get(TIMER2, TIMER_FLAG_UP)){
-        timer_flag_clear(TIMER2, TIMER_FLAG_UP);
-
-        if (delay_timer1 > 0x00U){
-            delay_timer1--;
-        }
-        if (delay_timer2 > 0x00U){
-            delay_timer2--;
-        }
-        // else {
-        //     timer_disable(TIMER2);
-        // }
-    }
-}
-*/
-
-/*!
-    \brief      this function handles Timer0 updata interrupt request.
-    \param[in]  none
-    \param[out] none
-    \retval     none
-*/
-void TIMER2_IRQHandler(void)
-{
-    // tfcard_timer_irq();
-}
-
 
 /*--------------------------------------------------------------------------
 
@@ -336,7 +272,6 @@ DSTATUS disk_initialize (
 	if (drv) return STA_NOINIT;			/* Supports only drive 0 */
 	init_spi();							/* Initialize SPI */
     delay_1ms(10);
-    init_timer2();
 
 	if (Stat & STA_NODISK) return Stat;	/* Is card existing in the soket? */
 
