@@ -44,13 +44,10 @@
 #define CMD55	(55)		/* APP_CMD */
 #define CMD58	(58)		/* READ_OCR */
 
+#define DELAY_TIMER (delta_mtime < (SystemCoreClock/4000.0 * wt))
+
 static volatile
 DSTATUS Stat = STA_NOINIT;	/* Physical drive status */
-
-// static volatile
-// UINT Timer1, Timer2;	/* 1kHz decrement timer stopped at zero (disk_timerproc()) */
-static volatile
-UINT delay_timer1, delay_timer2;        	/* 1kHz decrement timer stopped at zero (disk_timerproc()) */
 
 static
 BYTE CardType;			/* Card type flags */
@@ -135,13 +132,14 @@ int wait_ready (	/* 1:Ready, 0:Timeout */
 )
 {
 	BYTE d;
+	uint64_t start_mtime, delta_mtime;
 
-	// Timer2 = wt;
-    delay_timer2 = wt;
+	start_mtime = get_time();
 	do {
 		d = xchg_spi(0xFF);
 		/* This loop takes a time. Insert rot_rdq() here for multitask envilonment. */
-	} while (d != 0xFF && delay_timer2);	/* Wait for card goes ready or timeout */
+		delta_mtime = get_timer_value() - start_mtime;
+	} while (d != 0xFF && DELAY_TIMER );	/* Wait for card goes ready or timeout */
 
 	return (d == 0xFF) ? 1 : 0;
 }
@@ -189,12 +187,15 @@ int rcvr_datablock (	/* 1:OK, 0:Error */
 )
 {
 	BYTE token;
+	uint64_t start_mtime, delta_mtime;
 
-	delay_timer1 = 200;
+	UINT wt = 200;
+	start_mtime = get_time();
 	do {							/* Wait for DataStart token in timeout of 200ms */
 		token = xchg_spi(0xFF);
 		/* This loop will take a time. Insert rot_rdq() here for multitask envilonment. */
-	} while ((token == 0xFF) && delay_timer1);
+		delta_mtime = get_timer_value() - start_mtime;
+	} while ((token == 0xFF) && DELAY_TIMER );
 	if(token != 0xFE) return 0;		/* Function fails if invalid DataStart token or timeout */
 
 	rcvr_spi_multi(buff, btr);		/* Store trailing data to the buffer */
@@ -267,11 +268,12 @@ DSTATUS disk_initialize (
 )
 {
 	BYTE n, cmd, ty, ocr[4];
+	uint64_t start_mtime, delta_mtime;
 
 
 	if (drv) return STA_NOINIT;			/* Supports only drive 0 */
 	init_spi();							/* Initialize SPI */
-    delay_1ms(10);
+	delay_1ms(10);
 
 	if (Stat & STA_NODISK) return Stat;	/* Is card existing in the soket? */
 
@@ -281,12 +283,16 @@ DSTATUS disk_initialize (
 
 	ty = 0;
 	if (send_cmd(CMD0, 0) == 1) {			/* Put the card SPI/Idle state */
-		delay_timer1 = 1000;						/* Initialization timeout = 1 sec */
+		UINT wt = 1000;						/* Initialization timeout = 1 sec */
+		start_mtime = get_time();
+		delta_mtime = 0;
 		if (send_cmd(CMD8, 0x1AA) == 1) {	/* SDv2? */
 			for (n = 0; n < 4; n++) ocr[n] = xchg_spi(0xFF);	/* Get 32 bit return value of R7 resp */
 			if (ocr[2] == 0x01 && ocr[3] == 0xAA) {				/* Is the card supports vcc of 2.7-3.6V? */
-				while (delay_timer1 && send_cmd(ACMD41, 1UL << 30)) ;	/* Wait for end of initialization with ACMD41(HCS) */
-				if (delay_timer1 && send_cmd(CMD58, 0) == 0) {		/* Check CCS bit in the OCR */
+				while (DELAY_TIMER  && send_cmd(ACMD41, 1UL << 30)) {
+				       delta_mtime = get_timer_value() - start_mtime;
+				}	/* Wait for end of initialization with ACMD41(HCS) */
+				if (DELAY_TIMER  && send_cmd(CMD58, 0) == 0) {		/* Check CCS bit in the OCR */
 					for (n = 0; n < 4; n++) ocr[n] = xchg_spi(0xFF);
 					ty = (ocr[0] & 0x40) ? CT_SD2 | CT_BLOCK : CT_SD2;	/* Card id SDv2 */
 				}
@@ -297,8 +303,10 @@ DSTATUS disk_initialize (
 			} else {
 				ty = CT_MMC; cmd = CMD1;	/* MMCv3 (CMD1(0)) */
 			}
-			while (delay_timer1 && send_cmd(cmd, 0)) ;		/* Wait for end of initialization */
-			if (!delay_timer1 || send_cmd(CMD16, 512) != 0)	/* Set block length: 512 */
+			while (DELAY_TIMER  && send_cmd(cmd, 0)) {
+				delta_mtime = get_timer_value() - start_mtime;
+			}	/* Wait for end of initialization */
+			if (!DELAY_TIMER  || send_cmd(CMD16, 512) != 0)	/* Set block length: 512 */
 				ty = 0;
 		}
 	}
