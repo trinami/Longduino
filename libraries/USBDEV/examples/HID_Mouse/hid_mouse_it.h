@@ -32,8 +32,8 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 OF SUCH DAMAGE.
 */
 
-#ifndef GD32VF103_IT_H
-#define GD32VF103_IT_H
+#ifndef HID_MOUSE_IT_H
+#define HID_MOUSE_IT_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -50,14 +50,8 @@ typedef enum {
     JOY_RIGHT
 } joystate_enum;
 
-/* function declarations */
-/* this function handles USB wakeup interrupt handler */
-void USBFS_WKUP_IRQHandler(void);
-/* this function handles USBFS IRQ Handler */
-void USBFS_IRQHandler(void);
-
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* GD32VF103_IT_H */
+#endif /* HID_MOUSE_IT_H */

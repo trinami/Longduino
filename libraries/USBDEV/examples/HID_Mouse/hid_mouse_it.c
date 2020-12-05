@@ -33,7 +33,7 @@ OF SUCH DAMAGE.
 */
 
 #include "drv_usbd_int.h"
-#include "drv_usb_hw.h"
+#include "gd32vf103_usbd_hw.h"
 #include "hid_mouse_it.h"
 #include "standard_hid_core.h"
 #include "gd32vf103v_eval.h"
@@ -43,7 +43,6 @@ OF SUCH DAMAGE.
 extern usb_core_driver USB_OTG_dev;
 extern uint32_t usbfs_prescaler;
 
-void usb_timer_irq(void);
 static uint8_t  joystate_get(void);
 static uint8_t* usbd_mice_pos_get(void);
 
@@ -64,17 +63,6 @@ void eclic_mtip_handler(void)
     if ((buf[1] != 0) || (buf[2] != 0)) {
         hid_report_send(&USB_OTG_dev, buf, 4);
     }
-}
-
-/*!
-    \brief      this function handles USBD interrupt
-    \param[in]  none
-    \param[out] none
-    \retval     none
-*/
-void USBFS_IRQHandler(void)
-{
-    usbd_isr (&USB_OTG_dev);
 }
 
 /*!
@@ -104,38 +92,6 @@ void KEY_CET_IRQHandler()
 
             USB_OTG_dev.dev.pm.dev_remote_wakeup = 0U;
         }
-}
-
-/*!
-    \brief      this function handles USBD wakeup interrupt request.
-    \param[in]  none
-    \param[out] none
-    \retval     none
-*/
-void USBFS_WKUP_IRQHandler(void)
-{
-    if (USB_OTG_dev.bp.low_power) {
-        SystemInit();
-
-        rcu_usb_clock_config(usbfs_prescaler);
-
-        rcu_periph_clock_enable(RCU_USBFS);
-
-        usb_clock_active(&USB_OTG_dev);
-    }
-
-    exti_interrupt_flag_clear(EXTI_18);
-}
-
-/*!
-    \brief      this function handles Timer2 updata interrupt request.
-    \param[in]  none
-    \param[out] none
-    \retval     none
-*/
-void TIMER2_IRQHandler(void)
-{
-    usb_timer_irq();
 }
 
 /*!
