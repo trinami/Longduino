@@ -37,6 +37,10 @@ OF SUCH DAMAGE.
 
 #include "gd32vf103.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef enum
 {
     I2C_START = 0,
@@ -68,5 +72,8 @@ uint8_t eeprom_buffer_read_timeout(uint8_t* p_buffer, uint8_t read_address, uint
 /* wait for EEPROM standby state use timeout function */
 uint8_t  eeprom_wait_standby_state_timeout(void);
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif  /* AT24CXX_H */

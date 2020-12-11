@@ -37,6 +37,10 @@ OF SUCH DAMAGE.
 
 #include "gd32vf103.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define I2C0_SPEED              100000
 #define I2C0_SLAVE_ADDRESS7     0xA0
 #define I2C_PAGE_SIZE           8
@@ -47,5 +51,9 @@ void gpio_config(void);
 void i2c_config(void);
 /* reset i2c bus */
 void i2c_bus_reset(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif  /* I2C_H */

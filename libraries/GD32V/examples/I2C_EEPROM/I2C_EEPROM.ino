@@ -69,7 +69,7 @@ void led_config(void)
     \param[out] none
     \retval     none
 */
-int main(void)
+void setup()
 {       
     /* configure LEDs */
     led_config();
@@ -112,9 +112,12 @@ int main(void)
     gd_eval_led_on(LED2);
     gd_eval_led_on(LED3);
     gd_eval_led_on(LED4);
-    
-    while(1);
 
+}
+
+void loop()
+{
+    //
 }
 
 /*!
