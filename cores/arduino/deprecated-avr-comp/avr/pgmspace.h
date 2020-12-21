@@ -100,11 +100,23 @@ typedef const void* uint_farptr_t;
 #define snprintf_P(s, f, ...) snprintf((s), (f), __VA_ARGS__)
 #define vsnprintf_P(o, s, f, a) vsnprintf((o), (s), (f), (a))
 
-#define pgm_read_byte(addr) (*(const unsigned char *)(addr))
-#define pgm_read_word(addr) (*(const unsigned short *)(addr))
-#define pgm_read_dword(addr) (*(const unsigned long *)(addr))
-#define pgm_read_float(addr) (*(const float *)(addr))
-#define pgm_read_ptr(addr) (*(const void *)(addr))
+#define pgm_read_byte(addr)   (*(const unsigned char *)(addr))
+#define pgm_read_word(addr) ({ \
+  typeof(addr) _addr = (addr); \
+  *(const unsigned short *)(_addr); \
+})
+#define pgm_read_dword(addr) ({ \
+  typeof(addr) _addr = (addr); \
+  *(const unsigned long *)(_addr); \
+})
+#define pgm_read_float(addr) ({ \
+  typeof(addr) _addr = (addr); \
+  *(const float *)(_addr); \
+})
+#define pgm_read_ptr(addr) ({ \
+  typeof(addr) _addr = (addr); \
+  *(void * const *)(_addr); \
+})
 
 #define pgm_read_byte_near(addr) pgm_read_byte(addr)
 #define pgm_read_word_near(addr) pgm_read_word(addr)
