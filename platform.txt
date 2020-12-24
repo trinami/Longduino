@@ -1,5 +1,5 @@
 name=gd32vduino
-version=0.2.0
+version=0.2.1
 
 # arch
 arch=gd32v
