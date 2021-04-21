@@ -89,6 +89,91 @@ nano.menu.TFTFontMax.full=Full (8 + FreeFonts)
 nano.menu.TFTFontMax.full.font.set=full
 nano.menu.TFTFontMax.full.tft_font_max=9
 
+###########################################################
+############# Sipeed Longan Nano Lite Board ###############
+
+nanolite.name=Sipeed Longan Nano Lite Board
+
+## VID PID
+nanolite.build.vid=28e9
+nanolite.build.pid=0189
+
+## Toolchain
+nanolite.menu.toolsloc.default=Default
+nanolite.menu.toolsloc.default.compiler.path={runtime.tools.riscv-nuclei-elf-gcc.path}/bin/
+
+## CPU Clock
+nanolite.menu.clksrc.108=108MHz CPU Clock Frequency
+nanolite.menu.clksrc.96=96MHz CPU Clock Frequency
+nanolite.menu.clksrc.108.build.f_cpu=108000000L
+nanolite.menu.clksrc.96.build.f_cpu=96000000L
+
+## Burn baud rate
+nanolite.menu.burn_baudrate.115200=115200 bps
+nanolite.menu.burn_baudrate.115200.build.burn_baudrate=115200
+
+## HXTAL freq value
+nanolite.build.hxtal_value=8000000UL
+
+## Point to the file for ./variants/<variant>/pins_arduino.h
+nanolite.build.variant=sipeed-longan-nano-lite
+
+## "The 'core' file directory for this board, in ./cores
+nanolite.build.core=arduino
+
+## This sets a define for use in the compiled code.
+nanolite.build.board=BOARD_SIPEED_LONGAN_NANO_LITE
+nanolite.build.sdata.size=512
+
+## This selects the tool from "programmers.txt"
+nanolite.program.tool=serial
+nanolite.upload.tool=serial
+
+## Limit is the 64KiB Flash. Assume it is partially used for something else.
+nanolite.upload.maximum_size=32768
+#nanolite.upload.maximum_size=65536
+#nanolite.upload.maximum_data_size=20480
+nanolite.build.ldscript={runtime.platform.path}/cores/arduino/GD32VF103_Firmware_Library/RISCV/env_Eclipse/GD32VF103x8.lds
+
+nanolite.build.partitions=default
+nanolite.build.usb_mode=DEVICE
+nanolite.font.set=default
+
+nanolite.menu.PartitionScheme.default=Default (32KB APP/32KB Other)
+nanolite.menu.PartitionScheme.default.build.partitions=default
+nanolite.menu.PartitionScheme.default.upload.maximum_size=32768
+nanolite.menu.PartitionScheme.medium=Medium (40KB APP/24KB Other)
+nanolite.menu.PartitionScheme.medium.build.partitions=medium
+nanolite.menu.PartitionScheme.medium.upload.maximum_size=40960
+nanolite.menu.PartitionScheme.high=High (48KB APP/16KB Other)
+nanolite.menu.PartitionScheme.high.build.partitions=high
+nanolite.menu.PartitionScheme.high.upload.maximum_size=49152
+nanolite.menu.PartitionScheme.full=Full (64KB APP only)
+nanolite.menu.PartitionScheme.full.build.partitions=full
+nanolite.menu.PartitionScheme.full.upload.maximum_size=65536
+
+nanolite.menu.USBMode.Device=Device
+nanolite.menu.USBMode.Device.build.usb_mode=DEVICE
+nanolite.menu.USBMode.Host=Host
+nanolite.menu.USBMode.Host.build.usb_mode=HOST
+nanolite.menu.USBMode.OTG=OTG
+nanolite.menu.USBMode.OTG.build.usb_mode=OTG
+
+nanolite.menu.TFTFontMax.default=Default (4)
+nanolite.menu.TFTFontMax.default.font.set=default
+nanolite.menu.TFTFontMax.default.tft_font_max=4
+nanolite.menu.TFTFontMax.minimum=Minimum (GLCD font only)
+nanolite.menu.TFTFontMax.minimum.font.set=minimum
+nanolite.menu.TFTFontMax.minimum.tft_font_max=1
+nanolite.menu.TFTFontMax.medium=Medium (6)
+nanolite.menu.TFTFontMax.medium.font.set=medium
+nanolite.menu.TFTFontMax.medium.tft_font_max=6
+nanolite.menu.TFTFontMax.high=High (8)
+nanolite.menu.TFTFontMax.high.font.set=high
+nanolite.menu.TFTFontMax.high.tft_font_max=8
+nanolite.menu.TFTFontMax.full=Full (8 + FreeFonts)
+nanolite.menu.TFTFontMax.full.font.set=full
+nanolite.menu.TFTFontMax.full.tft_font_max=9
 
 ##################################################
 ############# GD32VF103 EVAL Board ###############
