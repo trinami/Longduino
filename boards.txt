@@ -3,6 +3,7 @@ menu.burn_baudrate=Burn Baud Rate
 menu.toolsloc=Tool Install Location
 menu.PartitionScheme=Partition Scheme
 menu.USBMode=USB Mode
+menu.TFTFontMax=TFT Font Max
 
 ##################################################
 ############# Sipeed Longan Nano Board ###############
@@ -50,6 +51,7 @@ nano.build.ldscript={runtime.platform.path}/cores/arduino/GD32VF103_Firmware_Lib
 
 nano.build.partitions=default
 nano.build.usb_mode=DEVICE
+nano.font.set=default
 
 nano.menu.PartitionScheme.default=Default (64KB APP/64KB Other)
 nano.menu.PartitionScheme.default.build.partitions=default
@@ -70,6 +72,19 @@ nano.menu.USBMode.Host=Host
 nano.menu.USBMode.Host.build.usb_mode=HOST
 nano.menu.USBMode.OTG=OTG
 nano.menu.USBMode.OTG.build.usb_mode=OTG
+
+nano.menu.TFTFontMax.default=Default (4)
+nano.menu.TFTFontMax.default.font.set=default
+nano.menu.TFTFontMax.default.tft_font_max=4
+nano.menu.TFTFontMax.medium=Medium (6)
+nano.menu.TFTFontMax.medium.font.set=medium
+nano.menu.TFTFontMax.medium.tft_font_max=6
+nano.menu.TFTFontMax.high=High (8)
+nano.menu.TFTFontMax.high.font.set=high
+nano.menu.TFTFontMax.high.tft_font_max=8
+nano.menu.TFTFontMax.full=Full (8 + FreeFonts)
+nano.menu.TFTFontMax.full.font.set=full
+nano.menu.TFTFontMax.full.tft_font_max=9
 
 
 ##################################################
@@ -114,6 +129,7 @@ eval.build.ldscript={runtime.platform.path}/cores/arduino/GD32VF103_Firmware_Lib
 
 eval.build.partitions=default
 eval.build.usb_mode=DEVICE
+eval.font.set=default
 
 eval.menu.PartitionScheme.default=Default (64KB APP/64KB Other)
 eval.menu.PartitionScheme.default.build.partitions=default
@@ -134,6 +150,19 @@ eval.menu.USBMode.Host=Host
 eval.menu.USBMode.Host.build.usb_mode=HOST
 eval.menu.USBMode.OTG=OTG
 eval.menu.USBMode.OTG.build.usb_mode=OTG
+
+eval.menu.TFTFontMax.default=Default (4)
+eval.menu.TFTFontMax.default.font.set=default
+eval.menu.TFTFontMax.default.tft_font_max=4
+eval.menu.TFTFontMax.medium=Medium (6)
+eval.menu.TFTFontMax.medium.font.set=medium
+eval.menu.TFTFontMax.medium.tft_font_max=6
+eval.menu.TFTFontMax.high=High (8)
+eval.menu.TFTFontMax.high.font.set=high
+eval.menu.TFTFontMax.high.tft_font_max=8
+eval.menu.TFTFontMax.full=Full (8 + FreeFonts)
+eval.menu.TFTFontMax.full.font.set=full
+eval.menu.TFTFontMax.full.tft_font_max=9
 
 ###################################################
 ############# Seeed Wio Lite Risc-V ###############
@@ -181,6 +210,7 @@ wio_lite-risc-v.build.ldscript={runtime.platform.path}/cores/arduino/GD32VF103_F
 
 wio_lite-risc-v.build.partitions=default
 wio_lite-risc-v.build.usb_mode=DEVICE
+wio_lite-risc-v.font.set=default
 
 wio_lite-risc-v.menu.PartitionScheme.default=Default (64KB APP/64KB Other)
 wio_lite-risc-v.menu.PartitionScheme.default.build.partitions=default
@@ -201,6 +231,19 @@ wio_lite-risc-v.menu.USBMode.Host=Host
 wio_lite-risc-v.menu.USBMode.Host.build.usb_mode=HOST
 wio_lite-risc-v.menu.USBMode.OTG=OTG
 wio_lite-risc-v.menu.USBMode.OTG.build.usb_mode=OTG
+
+wio_lite-risc-v.menu.TFTFontMax.default=Default (4)
+wio_lite-risc-v.menu.TFTFontMax.default.font.set=default
+wio_lite-risc-v.menu.TFTFontMax.default.tft_font_max=4
+wio_lite-risc-v.menu.TFTFontMax.medium=Medium (6)
+wio_lite-risc-v.menu.TFTFontMax.medium.font.set=medium
+wio_lite-risc-v.menu.TFTFontMax.medium.tft_font_max=6
+wio_lite-risc-v.menu.TFTFontMax.high=High (8)
+wio_lite-risc-v.menu.TFTFontMax.high.font.set=high
+wio_lite-risc-v.menu.TFTFontMax.high.tft_font_max=8
+wio_lite-risc-v.menu.TFTFontMax.full=Full (8 + FreeFonts)
+wio_lite-risc-v.menu.TFTFontMax.full.font.set=full
+wio_lite-risc-v.menu.TFTFontMax.full.tft_font_max=9
 
 ###################################################
 ############# Seeed GD32 RISC-V Dev Board ###############
@@ -248,6 +291,7 @@ gd32-risc-v-dev.build.ldscript={runtime.platform.path}/cores/arduino/GD32VF103_F
 
 gd32-risc-v-dev.build.partitions=default
 gd32-risc-v-dev.build.usb_mode=DEVICE
+gd32-risc-v-dev.font.set=default
 
 gd32-risc-v-dev.menu.PartitionScheme.default=Default (64KB APP/64KB Other)
 gd32-risc-v-dev.menu.PartitionScheme.default.build.partitions=default
@@ -268,4 +312,17 @@ gd32-risc-v-dev.menu.USBMode.Host=Host
 gd32-risc-v-dev.menu.USBMode.Host.build.usb_mode=HOST
 gd32-risc-v-dev.menu.USBMode.OTG=OTG
 gd32-risc-v-dev.menu.USBMode.OTG.build.usb_mode=OTG
+
+gd32-risc-v-dev.menu.TFTFontMax.default=Default (4)
+gd32-risc-v-dev.menu.TFTFontMax.default.font.set=default
+gd32-risc-v-dev.menu.TFTFontMax.default.tft_font_max=4
+gd32-risc-v-dev.menu.TFTFontMax.medium=Medium (6)
+gd32-risc-v-dev.menu.TFTFontMax.medium.font.set=medium
+gd32-risc-v-dev.menu.TFTFontMax.medium.tft_font_max=6
+gd32-risc-v-dev.menu.TFTFontMax.high=High (8)
+gd32-risc-v-dev.menu.TFTFontMax.high.font.set=high
+gd32-risc-v-dev.menu.TFTFontMax.high.tft_font_max=8
+gd32-risc-v-dev.menu.TFTFontMax.full=Full (8 + FreeFonts)
+gd32-risc-v-dev.menu.TFTFontMax.full.font.set=full
+gd32-risc-v-dev.menu.TFTFontMax.full.tft_font_max=9
 
