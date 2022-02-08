@@ -130,27 +130,26 @@ nanolite.program.tool=serial
 nanolite.upload.tool=serial
 
 ## Limit is the 64KiB Flash. Assume it is partially used for something else.
-nanolite.upload.maximum_size=32768
-#nanolite.upload.maximum_size=65536
-#nanolite.upload.maximum_data_size=20480
+nanolite.upload.maximum_size=65536
+nanolite.upload.maximum_data_size=20480
 nanolite.build.ldscript={runtime.platform.path}/cores/arduino/GD32VF103_Firmware_Library/RISCV/env_Eclipse/GD32VF103x8.lds
 
 nanolite.build.partitions=default
 nanolite.build.usb_mode=DEVICE
 nanolite.font.set=default
 
-nanolite.menu.PartitionScheme.default=Default (32KB APP/32KB Other)
-nanolite.menu.PartitionScheme.default.build.partitions=default
-nanolite.menu.PartitionScheme.default.upload.maximum_size=32768
+nanolite.menu.PartitionScheme.default=Default (64KB APP only)
+nanolite.menu.PartitionScheme.default.build.partitions=full
+nanolite.menu.PartitionScheme.default.upload.maximum_size=65536
+nanolite.menu.PartitionScheme.low=Low (32KB APP/32KB Other)
+nanolite.menu.PartitionScheme.low.build.partitions=default
+nanolite.menu.PartitionScheme.low.upload.maximum_size=32768
 nanolite.menu.PartitionScheme.medium=Medium (40KB APP/24KB Other)
 nanolite.menu.PartitionScheme.medium.build.partitions=medium
 nanolite.menu.PartitionScheme.medium.upload.maximum_size=40960
 nanolite.menu.PartitionScheme.high=High (48KB APP/16KB Other)
 nanolite.menu.PartitionScheme.high.build.partitions=high
 nanolite.menu.PartitionScheme.high.upload.maximum_size=49152
-nanolite.menu.PartitionScheme.full=Full (64KB APP only)
-nanolite.menu.PartitionScheme.full.build.partitions=full
-nanolite.menu.PartitionScheme.full.upload.maximum_size=65536
 
 nanolite.menu.USBMode.Device=Device
 nanolite.menu.USBMode.Device.build.usb_mode=DEVICE
