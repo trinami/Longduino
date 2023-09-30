@@ -93,7 +93,7 @@ OF SUCH DAMAGE.
 //#define VBUS_SENSING_ENABLED
 
 //#define USE_HOST_MODE
-//#define USE_DEVICE_MODE
+#define USE_DEVICE_MODE
 //#define USE_OTG_MODE
 
 #ifdef USE_HOST_MODE
