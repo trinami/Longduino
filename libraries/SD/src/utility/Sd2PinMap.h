@@ -520,7 +520,7 @@ uint8_t const SCK_PIN = 13;
 
 #endif	// Arduino ARC
 
-#elif defined(GD32V)
+#else
 #include "pins_arduino.h"
 
 #define SPI1_SS PB12
@@ -540,6 +540,4 @@ uint8_t const SCK_PIN = SPI1_SCK;
 #define SDCARD_MISO_PIN SPI1_MISO
 #define SDCARD_SCK_PIN SPI1_SCK
 
-#else
-#error Architecture or board not supported.
 #endif
